@@ -13,7 +13,8 @@
     "preserveConstEnums": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "target": "ESNext"
   },
   "include": [
     "lib/**/*",

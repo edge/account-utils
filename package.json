@@ -13,9 +13,13 @@
   "license": "ISC",
   "devDependencies": {
     "@edge/eslint-config-typescript": "^0.1.5",
+    "@types/superagent": "^8.1.7",
     "@typescript-eslint/eslint-plugin": "^7.9.0",
     "@typescript-eslint/parser": "^7.9.0",
     "eslint": "^8.57.0",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "superagent": "^9.0.2"
   }
 }

@@ -1,1 +1,20 @@
+import { SuperAgentRequest } from 'superagent'
+
+export interface Key {
+  _key: string
+}
+
+/**
+ * Callback function allowing a SuperAgent HTTP request to be modified before it is sent.
+ * https://visionmedia.github.io/superagent/
+ */
+export interface RequestCallback {
+  (r: SuperAgentRequest): SuperAgentRequest
+}
+
+export interface Timestamps {
+  created?: number
+  updated?: number
+}
+
 export default {}
