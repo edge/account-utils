@@ -1,3 +1,10 @@
+export * as account from './account'
+export * as promo from './promo'
+export * as session from './session'
+
+import * as account from './account'
+import * as promo from './promo'
+import * as session from './session'
 import { SuperAgentRequest } from 'superagent'
 
 export interface Key {
@@ -17,4 +24,8 @@ export interface Timestamps {
   updated?: number
 }
 
-export default {}
+export default {
+  account,
+  promo,
+  session
+}
