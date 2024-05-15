@@ -1,0 +1,21 @@
+{
+  "name": "@edge/account-utils",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint --ext .ts src",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@edge/eslint-config-typescript": "^0.1.5",
+    "@typescript-eslint/eslint-plugin": "^7.9.0",
+    "@typescript-eslint/parser": "^7.9.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5"
+  }
+}
