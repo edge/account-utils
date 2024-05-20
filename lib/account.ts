@@ -7,11 +7,66 @@ import type * as session from './session'
 import superagent from 'superagent'
 import { Key, RequestCallback, Timestamps } from '.'
 
-/** @todo */
-export interface Account extends Key, Timestamps {}
-
-/** @todo */
-export interface TOTP {}
+/**
+ * An account provides access to features of the account system.
+ */
+export interface Account extends Key, Timestamps {
+  /** XE wallet */
+  wallet: {
+    address: string
+  }
+  /** Referral code (for other, new accounts) */
+  referralCode: string
+  /** Account email */
+  email?: {
+    /** Email address */
+    address?: string
+    /** Verification secret */
+    secret: string
+    /** Verification secret expiry time */
+    secretExpiry: number
+    /** Unverified email address, will be transferred to `address` once verified */
+    unverifiedAddress?: null | string
+  }
+  /** Stripe data */
+  stripe?: {
+    customer: {
+      id: string
+    }
+  }
+  /** Automatic top-up settings */
+  topup?: null | {
+    /** Payment method key */
+    paymentMethod?: string | null
+  }
+  /** Two-factor authentication count */
+  totps?: number
+  /** Beta service access */
+  betaServices?: string[]
+  /** Registration source. */
+  source?: string
+  /**
+   * Setup flag.
+   * Indicates whether the account has completed first-time setup.
+   */
+  isSetup?: boolean
+  /**
+   * Use crypto view flag.
+   * Indicates whether the account prefers fiat-only view or will see XE as well.
+   */
+  useCryptoView?: boolean
+  /**
+   * Managed account flag.
+   * If true, the account is exempt from some billing effects.
+   */
+  managed?: boolean
+  /** Suspended service flag */
+  suspended?: boolean
+  /** Warned of low balance flag */
+  warned?: boolean
+  /** Disabled account flag. */
+  disabled?: boolean
+}
 
 export interface AddEmailRequest {
   account: string
@@ -49,19 +104,6 @@ export interface CreateAccountResponse {
   session: session.Session
 }
 
-export interface DisableTOTPRequest {
-  account: string
-  totp?: string
-  otp?: string
-  backupCode?: string
-}
-
-export interface DisableTOTPResponse {
-  /** Excluded if the account does not have a TOTP. */
-  account?: Account
-  message: string
-}
-
 export interface GetAccountResponse {
   account: Account
 }
@@ -84,6 +126,19 @@ export interface RemoveEmailRequest {
 
 export interface RemoveEmailResponse {
   account: Account
+  message: string
+}
+
+export interface RemoveTOTPRequest {
+  account: string
+  totp?: string
+  otp?: string
+  backupCode?: string
+}
+
+export interface RemoveTOTPResponse {
+  /** Excluded if the account does not have a TOTP. */
+  account?: Account
   message: string
 }
 
@@ -160,12 +215,6 @@ export async function createAccount(host: string, data?: CreateAccountRequest, c
   return res.body
 }
 
-export async function disableAccountTOTP(host: string, token: string, data: DisableTOTPRequest, cb?: RequestCallback): Promise<DisableTOTPResponse> {
-  const req = superagent.delete(`${host}/account/totp`).set('Authorization', `Bearer ${token}`).send(data)
-  const res = await cb?.(req) || await req
-  return res.body
-}
-
 export async function getAccount(host: string, token: string, cb?: RequestCallback): Promise<GetAccountResponse> {
   const req = superagent.get(`${host}/account`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
@@ -186,6 +235,12 @@ export async function getAccountReferredAccounts(host: string, token: string, cb
 
 export async function removeAccountEmail(host: string, token: string, data: RemoveEmailRequest, cb?: RequestCallback): Promise<RemoveEmailResponse> {
   const req = superagent.delete(`${host}/account/email`).set('Authorization', `Bearer ${token}`).send(data)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function removeAccountTOTP(host: string, token: string, data: RemoveTOTPRequest, cb?: RequestCallback): Promise<RemoveTOTPResponse> {
+  const req = superagent.delete(`${host}/account/totp`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }

@@ -24,6 +24,8 @@ describe('account', () => {
       /** @todo response validation */
       await lib.getAccount(config.host, state.token, requestCallback)
     })
+
+    it('should log in', () => void 0)
   })
 
   describe('crypto', () => {
@@ -54,11 +56,17 @@ describe('account', () => {
   describe('2FA', () => {
     it('should add 2FA', () => void 0)
     it('should log in with 2FA', () => void 0)
+    it('should fail to log in if TOTP not provided', () => void 0)
     it('should remove 2FA', () => void 0)
   })
 
   describe('referrals', () => {
     it('should refer an account', () => void 0)
     it('should get the number of referred accounts', () => void 0)
+  })
+
+  describe('session', () => {
+    it('should extend the session', () => void 0)
+    it('should delete the session', () => void 0)
   })
 })
