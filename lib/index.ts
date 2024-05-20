@@ -1,5 +1,6 @@
 export * from './account'
 export * from './promo'
+export * from './server'
 export * from './session'
 
 import { SuperAgentRequest } from 'superagent'
