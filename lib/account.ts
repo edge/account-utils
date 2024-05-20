@@ -142,86 +142,86 @@ export interface VerifyMagicLinkTokenResponse {
   message: string
 }
 
-export async function addEmail(host: string, token: string, data: AddEmailRequest, cb?: RequestCallback): Promise<AddEmailResponse> {
+export async function addAccountEmail(host: string, token: string, data: AddEmailRequest, cb?: RequestCallback): Promise<AddEmailResponse> {
   const req = superagent.post(`${host}/account/email`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function addTOTP(host: string, token: string, data: AddTOTPRequest, cb?: RequestCallback): Promise<AddTOTPResponse> {
+export async function addAccountTOTP(host: string, token: string, data: AddTOTPRequest, cb?: RequestCallback): Promise<AddTOTPResponse> {
   const req = superagent.post(`${host}/account/totp`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function create(host: string, data: CreateAccountRequest, cb?: RequestCallback): Promise<CreateAccountResponse> {
+export async function createAccount(host: string, data?: CreateAccountRequest, cb?: RequestCallback): Promise<CreateAccountResponse> {
   const req = superagent.post(`${host}/account`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function disableTOTP(host: string, token: string, data: DisableTOTPRequest, cb?: RequestCallback): Promise<DisableTOTPResponse> {
+export async function disableAccountTOTP(host: string, token: string, data: DisableTOTPRequest, cb?: RequestCallback): Promise<DisableTOTPResponse> {
   const req = superagent.delete(`${host}/account/totp`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function get(host: string, token: string, cb?: RequestCallback): Promise<GetAccountResponse> {
+export async function getAccount(host: string, token: string, cb?: RequestCallback): Promise<GetAccountResponse> {
   const req = superagent.get(`${host}/account`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function getProgress(host: string, token: string, cb?: RequestCallback): Promise<GetProgressResponse> {
+export async function getAccountProgress(host: string, token: string, cb?: RequestCallback): Promise<GetProgressResponse> {
   const req = superagent.get(`${host}/account/progress`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function getReferredAccounts(host: string, token: string, cb?: RequestCallback): Promise<GetReferredAccountsResponse>{
+export async function getAccountReferredAccounts(host: string, token: string, cb?: RequestCallback): Promise<GetReferredAccountsResponse>{
   const req = superagent.get(`${host}/account/referred`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function removeEmail(host: string, token: string, data: RemoveEmailRequest, cb?: RequestCallback): Promise<RemoveEmailResponse> {
+export async function removeAccountEmail(host: string, token: string, data: RemoveEmailRequest, cb?: RequestCallback): Promise<RemoveEmailResponse> {
   const req = superagent.delete(`${host}/account/email`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
 // eslint-disable-next-line max-len
-export async function resendVerificationEmail(host: string, token: string, data: ResendVerificationEmailData, cb?: RequestCallback): Promise<ResendVerificationEmailResponse> {
+export async function resendAccountVerificationEmail(host: string, token: string, data: ResendVerificationEmailData, cb?: RequestCallback): Promise<ResendVerificationEmailResponse> {
   const req = superagent.post(`${host}/account/email/verify/resend`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function sendMagicLink(host: string, data: SendMagicLinkRequest, cb?: RequestCallback): Promise<SendMagicLinkResponse> {
+export async function sendAccountMagicLink(host: string, data: SendMagicLinkRequest, cb?: RequestCallback): Promise<SendMagicLinkResponse> {
   const req = superagent.post(`${host}/account/magicLink`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function update(host: string, token: string, data: UpdateAccountRequest, cb?: RequestCallback): Promise<UpdateAccountResponse> {
+export async function updateAccount(host: string, token: string, data: UpdateAccountRequest, cb?: RequestCallback): Promise<UpdateAccountResponse> {
   const req = superagent.put(`${host}/account`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function updateEmail(host: string, token: string, data: UpdateEmailRequest, cb?: RequestCallback): Promise<UpdateEmailResponse> {
+export async function updateAccountEmail(host: string, token: string, data: UpdateEmailRequest, cb?: RequestCallback): Promise<UpdateEmailResponse> {
   const req = superagent.put(`${host}/account/email`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function verifyEmail(host: string, token: string, data: VerifyEmailRequest, cb?: RequestCallback): Promise<VerifyEmailResponse> {
+export async function verifyAccountEmail(host: string, token: string, data: VerifyEmailRequest, cb?: RequestCallback): Promise<VerifyEmailResponse> {
   const req = superagent.post(`${host}/account/email/verify`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function verifyMagicLinkToken(host: string, token: string, cb?: RequestCallback): Promise<VerifyMagicLinkTokenResponse> {
+export async function verifyAccountMagicLinkToken(host: string, token: string, cb?: RequestCallback): Promise<VerifyMagicLinkTokenResponse> {
   const req = superagent.post(`${host}/account/magicLink/verify`).send({ token })
   const res = await cb?.(req) || await req
   return res.body

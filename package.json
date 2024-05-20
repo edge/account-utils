@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@edge/eslint-config-typescript": "^0.1.5",
+    "@edge/misc-utils": "^1.0.7",
     "@types/chai": "^4.3.16",
     "@types/mocha": "^10.0.6",
     "@types/superagent": "^8.1.7",
