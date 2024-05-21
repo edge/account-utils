@@ -1,5 +1,7 @@
 export * from './account'
+export * from './os'
 export * from './promo'
+export * from './region'
 export * from './server'
 export * from './serverBackups'
 export * from './session'
