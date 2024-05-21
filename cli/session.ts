@@ -12,8 +12,8 @@ function createSession({ config, print, state }: Context) {
 function deleteSession({ config, print, state }: Context) {
   return async function() {
     if (!state.session) return
-    const res = await lib.err(lib.updateSession(config.api.url, state.session._key, r => r.timeout(config.api.timeout)))
-    state.session = res.session
+    const res = await lib.err(lib.deleteSession(config.api.url, state.session._key, r => r.timeout(config.api.timeout)))
+    state.session = undefined
     print(res)
   }
 }
