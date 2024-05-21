@@ -17,7 +17,8 @@
     "target": "ESNext"
   },
   "include": [
-    "lib/**/*",
+    "cli/**/*",
+    "lib/**/*"
   ],
   "exclude": [
     "node_modules"
