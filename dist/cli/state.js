@@ -12,6 +12,7 @@ async function createState(ctx) {
         const newState = JSON.parse(data.toString());
         for (const prop in newState) {
             const p = prop;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             state[p] = newState[p];
         }
     }
@@ -29,11 +30,25 @@ async function createState(ctx) {
         }
     }
     return {
+        get integrationKey() {
+            return state.integrationKey;
+        },
+        set integrationKey(v) {
+            state.integrationKey = v;
+            write();
+        },
         get session() {
             return state.session;
         },
         set session(v) {
             state.session = v;
+            write();
+        },
+        get storageApiKey() {
+            return state.storageApiKey;
+        },
+        set storageApiKey(v) {
+            state.storageApiKey = v;
             write();
         }
     };
