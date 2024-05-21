@@ -46,7 +46,7 @@ export async function getTask(host: string, token: string, key: string, cb?: Req
   return res.body
 }
 
-export async function getTasks(host: string, token: string, params: GetTasksParams, cb?: RequestCallback): Promise<SearchResponse<Task>> {
+export async function getTasks(host: string, token: string, params?: GetTasksParams, cb?: RequestCallback): Promise<SearchResponse<Task>> {
   const req = superagent.get(`${host}/tasks`).set('Authorization', `Bearer ${token}`)
   params && req.query(params)
   const res = await cb?.(req) || await req
