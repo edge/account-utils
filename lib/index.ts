@@ -1,4 +1,5 @@
 export * from './account'
+export * from './misc'
 export * from './os'
 export * from './promo'
 export * from './region'
