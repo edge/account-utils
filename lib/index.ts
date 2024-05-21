@@ -3,6 +3,7 @@ export * from './promo'
 export * from './server'
 export * from './serverBackups'
 export * from './session'
+export * from './task'
 
 import { SuperAgentRequest } from 'superagent'
 
