@@ -1,4 +1,5 @@
 import * as session from './session'
+import * as storage from './storage'
 import { Command } from 'commander'
 import createState from './state'
 import { Config, Context } from './types'
@@ -15,6 +16,7 @@ export default async function main(argv: string[], config: Config) {
   }
 
   session.register(ctx)
+  storage.register(ctx)
 
   await root.parseAsync(argv)
 }

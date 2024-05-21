@@ -5,7 +5,9 @@ import path from 'path'
 
 export default async function createState(ctx: Context) {
   interface InternalState {
+    integrationKey?: string
     session?: lib.Session
+    storageApiKey?: string
   }
 
   const state = <InternalState>{}
@@ -15,7 +17,8 @@ export default async function createState(ctx: Context) {
     const newState = JSON.parse(data.toString()) as typeof state
     for (const prop in newState) {
       const p = prop as keyof typeof state
-      state[p] = newState[p]
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      state[p] = newState[p] as any
     }
   }
 
@@ -35,14 +38,28 @@ export default async function createState(ctx: Context) {
   }
 
   return {
+    get integrationKey() {
+      return state.integrationKey
+    },
+    set integrationKey(v: string | undefined) {
+      state.integrationKey = v
+      write()
+    },
+
     get session() {
       return state.session
     },
-
     set session(v: lib.Session | undefined) {
       state.session = v
+      write()
+    },
+
+    get storageApiKey() {
+      return state.storageApiKey
+    },
+    set storageApiKey(v: string | undefined) {
+      state.storageApiKey = v
       write()
     }
   }
 }
-

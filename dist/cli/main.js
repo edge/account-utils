@@ -27,6 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const session = __importStar(require("./session"));
+const storage = __importStar(require("./storage"));
 const commander_1 = require("commander");
 const state_1 = __importDefault(require("./state"));
 async function main(argv, config) {
@@ -38,6 +39,7 @@ async function main(argv, config) {
         console.log(out);
     };
     session.register(ctx);
+    storage.register(ctx);
     await root.parseAsync(argv);
 }
 exports.default = main;
