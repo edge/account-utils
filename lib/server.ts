@@ -103,6 +103,20 @@ export interface CreateServerResponse {
   detail?: string
 }
 
+export interface DestroyServerResponse {
+  server: Server
+  task: task.Task
+  message: string
+}
+
+export interface GetServerMetricsResponse {
+  cpu: number[][]
+  mem: number[][]
+  disk: number[][]
+  bwin: number[][]
+  bwout: number[][]
+}
+
 export interface GetServerResponse {
   server: Server
 }
@@ -139,6 +153,10 @@ export interface GetServersParams {
   search?: string
 }
 
+export interface RemoveServerBackupStrategyResponse {
+  server: Server
+}
+
 export interface ResizeServerRequest {
   spec: Partial<Server['spec']>
 }
@@ -159,6 +177,17 @@ export interface StopServerResponse {
   server: Server
   task: task.Task
   message: string
+}
+
+export interface UpdateServerBackupStrategyRequest {
+  strategy: {
+    schedule: string
+    retention: number
+  }
+}
+
+export interface UpdateServerBackupStrategyResponse {
+  server: Server
 }
 
 export interface UpdateServerRequest {
@@ -183,7 +212,7 @@ export async function createServerHostname(host: string, token: string, cb?: Req
   return res.body
 }
 
-export async function destroyServer(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetServerResponse> {
+export async function destroyServer(host: string, token: string, key: string, cb?: RequestCallback): Promise<DestroyServerResponse> {
   const req = superagent.delete(`${host}/server/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
@@ -191,6 +220,12 @@ export async function destroyServer(host: string, token: string, key: string, cb
 
 export async function getServer(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetServerResponse> {
   const req = superagent.get(`${host}/server/${key}`).set('Authorization', `Bearer ${token}`)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function getServerMetrics(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetServerMetricsResponse> {
+  const req = superagent.get(`${host}/server/${key}/metrics`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
@@ -221,6 +256,12 @@ export async function getServers(host: string, token: string, params?: GetServer
   return res.body
 }
 
+export async function removeServerBackupStrategy(host: string, token: string, key: string, cb?: RequestCallback): Promise<RemoveServerBackupStrategyResponse> {
+  const req = superagent.delete(`${host}/server/${key}/backups/strategy`).set('Authorization', `Bearer ${token}`)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
 export async function resizeServer(host: string, token: string, key: string, data: ResizeServerRequest, cb?: RequestCallback): Promise<ResizeServerResponse> {
   const req = superagent.post(`${host}/server/${key}/resize`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
@@ -241,6 +282,13 @@ export async function stopServer(host: string, token: string, key: string, cb?: 
 
 export async function updateServer(host: string, token: string, key: string, data: UpdateServerRequest, cb?: RequestCallback): Promise<UpdateServerResponse> {
   const req = superagent.put(`${host}/server/${key}`).set('Authorization', `Bearer ${token}`).send(data)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+// eslint-disable-next-line max-len
+export async function updateServerBackupStrategy(host: string, token: string, key: string, data: UpdateServerBackupStrategyRequest, cb?: RequestCallback): Promise<UpdateServerBackupStrategyResponse> {
+  const req = superagent.put(`${host}/server/${key}/backups/strategy`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
