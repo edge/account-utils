@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "description": "",
   "main": "dist/lib/index.js",
-  "bin": "bin/account-cli",
+  "bin": {
+    "account-utils": "bin/account-cli"
+  },
   "scripts": {
     "build": "tsc",
     "cli": "ts-node cli/index.ts",
