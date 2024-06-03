@@ -338,7 +338,43 @@ export async function deletePaymentMethod(host: string, token: string, key: stri
   return res.body
 }
 
-// export async function downloadInvoice(host: String, token: string, key: string, cb?: RequestCallback) {}
+/**
+ * Download an invoice PDF.
+ * In this form, the PDF data blob will be returned to the caller.
+ */
+export function downloadInvoice(host: string, token: string, key: string, cb?: RequestCallback): Promise<Blob>
+/**
+ * Download an invoice PDF.
+ * When a `filename` string is provided, this function attempts to download the PDF using a DOM workaround instead
+ * of returning the PDF data blob to the caller.
+ * This will only work correctly in a web browser.
+ */
+export function downloadInvoice(host: string, token: string, key: string, filename: string, cb?: RequestCallback): Promise<void>
+export async function downloadInvoice(host: string, token: string, key: string, filename?: string | RequestCallback, cb?: RequestCallback) {
+  // Resolve optional arguments
+  if (typeof filename === 'function') {
+    cb = filename
+    filename = undefined
+  }
+
+  const req = superagent.get(`${host}/billing/invoices/${key}/download`)
+    .responseType('blob')
+    .set('Authorization', `Bearer ${token}`)
+
+  const res = await cb?.(req) || await req
+
+  if (filename) {
+    const el = document.createElement('a')
+    const url = window.URL.createObjectURL(res.body)
+    el.href = url
+    el.download = filename
+    el.click()
+    window.URL.revokeObjectURL(url)
+  }
+  else {
+    return res.body
+  }
+}
 
 export async function getAccountBalance(host: string, token: string, cb?: RequestCallback): Promise<GetAccountBalanceResponse> {
   const req = superagent.get(`${host}/billing/balance`).set('Authorization', `Bearer ${token}`)
