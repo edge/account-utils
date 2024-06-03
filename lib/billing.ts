@@ -1,5 +1,6 @@
+import * as xe from '@edge/xe-utils'
 import superagent from 'superagent'
-import { Key, RequestCallback, SearchResponse, Timestamps } from '.'
+import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.'
 
 export interface AccountBalance {
   token: {
@@ -116,42 +117,62 @@ export interface InvoiceItem extends Pick<BillingCharge, 'entity' | 'summary' | 
   _id: string
 }
 
-/** @todo */
-export interface Payment {}
+export interface Payment extends Key, Timestamps {
+  /** Account key */
+  account: string
+  /** Invoice key */
+  invoice: string
+  /** Original USD amount */
+  amount: number
+  /** USD-XE rate of the corresponding invoice. */
+  rate: {
+    date: string
+    value: number
+  }
+  /** Payment status */
+  status: 'confirmed' | 'hold' | 'pending' | 'processed' | 'unsent'
+  /** Number of attempts to submit payment */
+  attempts: number
+  /** Tip block height when XE transaction was last attempted */
+  lastAttemptHeight?: number
+  /** Last response from XE blockchain */
+  lastResponse?: string
+  /** XE transaction */
+  tx: PaymentTransaction
+}
+
+export type PaymentTransaction = Omit<xe.tx.Tx, 'hash'> & Partial<Pick<xe.tx.Tx, 'hash'>>
 
 export type GetAccountBalanceResponse = AccountBalance
 
-export interface GetBillingChargesParams {
+export interface GetBillingChargesParams extends PaginationParams, PeriodParams {
   key?: string | string[]
   account?: string | string[]
   entity?: string | string[]
   serviceType?: string | string[]
-
-  since?: number
-  until?: number
-
-  limit?: number
-  page?: number
-  sort?: string | string[]
 }
 
 export interface GetInvoiceResponse {
   invoice: Invoice
 }
 
-export interface GetInvoicesParams {
+export interface GetInvoicesParams extends PaginationParams, PeriodParams {
   key?: string | string[]
   account?: string | string[]
   status?: string | string[]
 
-  since?: number
-  until?: number
-
-  limit?: number
-  page?: number
-  sort?: string | string[]
-
   search?: string
+}
+
+export interface GetPaymentsParams extends PaginationParams, PeriodParams {
+  key?: string | string[]
+  account?: string | string[]
+  invoice?: string | string[]
+  status?: string | string[]
+}
+
+export interface GetPaymentResponse {
+  payment: Payment
 }
 
 export interface UnholdInvoiceResponse {
@@ -182,7 +203,20 @@ export async function getInvoice(host: string, token: string, key: string, cb?: 
 }
 
 export async function getInvoices(host: string, token: string, params?: GetInvoicesParams, cb?: RequestCallback): Promise<SearchResponse<Invoice>> {
-  const req = superagent.get(`${host}/billing/charges`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/billing/invoices`).set('Authorization', `Bearer ${token}`)
+  params && req.query(params)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function getPayment(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetPaymentResponse> {
+  const req = superagent.get(`${host}/billing/payments/${key}`).set('Authorization', `Bearer ${token}`)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function getPayments(host: string, token: string, params?: GetPaymentsParams, cb?: RequestCallback): Promise<SearchResponse<Payment>> {
+  const req = superagent.get(`${host}/billing/payments`).set('Authorization', `Bearer ${token}`)
   params && req.query(params)
   const res = await cb?.(req) || await req
   return res.body

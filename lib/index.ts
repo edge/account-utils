@@ -20,6 +20,17 @@ export interface Key {
   _key: string
 }
 
+export interface PaginationParams<T extends string = string> {
+  limit?: number
+  page?: number
+  sort?: T | T[]
+}
+
+export interface PeriodParams {
+  since?: number
+  until?: number
+}
+
 /**
  * Callback function allowing a SuperAgent HTTP request to be modified before it is sent.
  * https://visionmedia.github.io/superagent/
