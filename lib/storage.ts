@@ -1,5 +1,5 @@
 import superagent from 'superagent'
-import { RequestCallback, SearchResponse } from '.'
+import { PaginationParams, RequestCallback, SearchResponse } from '.'
 
 export interface File {
   integration: string
@@ -38,16 +38,9 @@ export interface DeleteStorageNodeResponse {
   affected: number
 }
 
-export interface GetStorageFilesParams {
-  limit?: number
-  page?: number
-}
+export interface GetStorageFilesParams extends Omit<PaginationParams, 'sort'> {}
 
-export interface GetStorageNodeParams {
-  limit?: number
-  page?: number
-
-  sort?: string | string[]
+export interface GetStorageNodeParams extends PaginationParams {
   foldersTop?: boolean
 }
 

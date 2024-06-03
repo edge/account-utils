@@ -1,5 +1,5 @@
 import superagent from 'superagent'
-import { Key, RequestCallback, SearchResponse } from '.'
+import { Key, PaginationParams, RequestCallback, SearchResponse } from '.'
 
 /** Network region */
 export interface Region extends Key {
@@ -50,10 +50,7 @@ export interface GetRegionResponse {
   region: Region
 }
 
-export interface GetRegionsParams {
-  limit?: number
-  page?: number
-}
+export interface GetRegionsParams extends Omit<PaginationParams, 'sort'> {}
 
 export async function getRegion(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetRegionResponse> {
   const req = superagent.get(`${host}/regions/${key}`).set('Authorization', `Bearer ${token}`)

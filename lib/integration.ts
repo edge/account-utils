@@ -1,6 +1,6 @@
 import { Config } from '@edge/cache-config'
 import superagent from 'superagent'
-import { Key, RequestCallback, SearchResponse, Timestamps } from '.'
+import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.'
 
 /**
  * Integration as saved to an account.
@@ -104,7 +104,7 @@ export interface GetIntegrationResponse {
   integration: AccountIntegration
 }
 
-export interface GetIntegrationsParams {
+export interface GetIntegrationsParams extends PaginationParams, PeriodParams {
   key?: string | string[]
   account?: string | string[]
   name?: string | string[]
@@ -114,15 +114,7 @@ export interface GetIntegrationsParams {
   active?: boolean
   suspended?: boolean
 
-  since?: number
-  until?: number
-
-  limit?: number
-  page?: number
-
   search?: string
-
-  sort?: string | string[]
 }
 
 export type UpdateIntegrationRequest = Pick<AccountIntegration, 'account' | 'name' | 'data' | 'configMode'>

@@ -1,5 +1,5 @@
 import superagent from 'superagent'
-import { Key, RequestCallback, SearchResponse, Timestamps } from '.'
+import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.'
 
 /** DNS zone */
 export interface DnsZone extends Key, Timestamps {
@@ -39,23 +39,14 @@ export interface GetDnsZoneResponse {
   zone: DnsZone
 }
 
-export interface GetDnsZonesParams {
+export interface GetDnsZonesParams extends PaginationParams, PeriodParams {
   key?: string | string[]
   account?: string | string[]
   active?: boolean
   suspended?: boolean
 
   ns?: boolean
-
-  since?: number
-  until?: number
-
-  limit?: number
-  page?: number
-
   search?: string
-
-  sort?: string | string[]
 }
 
 export async function createDnsZone(host: string, token: string, data: CreateDnsZoneRequest, cb?: RequestCallback): Promise<CreateDnsZoneResponse> {

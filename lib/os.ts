@@ -1,5 +1,5 @@
 import superagent from 'superagent'
-import { Key, RequestCallback, SearchResponse } from '.'
+import { Key, PaginationParams, RequestCallback, SearchResponse } from '.'
 
 /** OS image */
 export interface OS extends Key {
@@ -15,10 +15,7 @@ export interface OS extends Key {
   active: boolean
 }
 
-export interface GetOSParams {
-  limit?: number
-  page?: number
-}
+export interface GetOSParams extends Omit<PaginationParams, 'sort'> {}
 
 export interface GetOSResponse {
   os: OS
