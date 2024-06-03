@@ -85,10 +85,6 @@ export interface Invoice extends Key, Timestamps {
   xeAmount: number
   /**
    * Purchase relation.
-   * This is **only set** by [automatic top-up](../jobs/checkBalance/topup.ts).
-   * It can be unset via the invoice unhold API or manually in the database.
-   *
-   * See https://github.com/edge/account-api/issues/194#issuecomment-1638269752 for background.
    */
   purchase?: string | null
   /**
@@ -143,6 +139,69 @@ export interface Payment extends Key, Timestamps {
 
 export type PaymentTransaction = Omit<xe.tx.Tx, 'hash'> & Partial<Pick<xe.tx.Tx, 'hash'>>
 
+export interface Purchase extends Key, Partial<StripePurchase>, Timestamps {
+  /** Account key */
+  account: string
+  /** Purchase amount and currency */
+  send: {
+    currency: string
+    amount: number
+  }
+  /** {send.currency}-{receive.currency} rate when payment created */
+  rate: {
+    date: string
+    value: number
+  }
+  /** Received amount and currency */
+  receive: {
+    currency: string
+    amount: number
+  }
+  auto?: boolean
+  /** Purchase status */
+  status: 'cancelled' | 'complete' | 'paid' | 'pending' | 'processed' | 'unpaid' | 'unsent'
+  /** XE transaction */
+  tx?: PurchaseTransaction
+  /** Number of attempts to submit XE transaction for purchase (after payment) */
+  attempts?: number
+  /** Tip block height when XE transaction was last attempted */
+  lastAttemptHeight?: number
+  /** Last response from XE blockchain */
+  lastResponse?: string
+}
+
+export type PurchaseTransaction = Omit<xe.tx.Tx, 'hash'> & Partial<Pick<xe.tx.Tx, 'hash'>>
+
+export interface StripePurchase {
+  intent: Record<string, unknown> & {
+    client_secret: string | null
+    customer: unknown
+    id: string
+    status: string
+  }
+}
+
+export interface BeginStripePurchaseRequest {
+  account: string
+  send: {
+    amount: number
+    currency: string
+  }
+  receive: {
+    currency: string
+  }
+}
+
+export interface BeginStripePurchaseResponse {
+  purchase: Purchase
+  message: string
+}
+
+export interface CancelPurchaseResponse {
+  purchase: Purchase
+  message: string
+}
+
 export type GetAccountBalanceResponse = AccountBalance
 
 export interface GetBillingChargesParams extends PaginationParams, PeriodParams {
@@ -175,9 +234,39 @@ export interface GetPaymentResponse {
   payment: Payment
 }
 
+export interface GetPurchaseResponse {
+  purchase: Purchase
+}
+
+export interface GetPurchasesParams extends PaginationParams, PeriodParams {
+  key?: string | string[]
+  account?: string | string[]
+  auto?: boolean
+  status?: string | string[]
+}
+
+export interface RefreshPurchaseResponse {
+  purchase: Purchase
+  /** Omitted if no action was taken */
+  message?: string
+}
+
 export interface UnholdInvoiceResponse {
   invoice: Invoice
   payment?: Payment
+}
+
+// eslint-disable-next-line max-len
+export async function beginStripePurchase(host: string, token: string, data: BeginStripePurchaseRequest, cb?: RequestCallback): Promise<BeginStripePurchaseResponse> {
+  const req = superagent.post(`${host}/billing/purchases`).set('Authorization', `Bearer ${token}`).send(data)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function cancelPurchase(host: string, token: string, key: string, cb?: RequestCallback): Promise<CancelPurchaseResponse> {
+  const req = superagent.post(`${host}/billing/purchases/${key}/cancel`).set('Authorization', `Bearer ${token}`)
+  const res = await cb?.(req) || await req
+  return res.body
 }
 
 // export async function downloadInvoice(host: String, token: string, key: string, cb?: RequestCallback) {}
@@ -218,6 +307,25 @@ export async function getPayment(host: string, token: string, key: string, cb?: 
 export async function getPayments(host: string, token: string, params?: GetPaymentsParams, cb?: RequestCallback): Promise<SearchResponse<Payment>> {
   const req = superagent.get(`${host}/billing/payments`).set('Authorization', `Bearer ${token}`)
   params && req.query(params)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function getPurchase(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetPurchaseResponse> {
+  const req = superagent.get(`${host}/billing/purchases/${key}`).set('Authorization', `Bearer ${token}`)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function getPurchases(host: string, token: string, params?: GetPurchasesParams, cb?: RequestCallback): Promise<SearchResponse<Purchase>> {
+  const req = superagent.get(`${host}/billing/purchases`).set('Authorization', `Bearer ${token}`)
+  params && req.query(params)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function refreshPurchase(host: string, token: string, key: string, cb?: RequestCallback): Promise<RefreshPurchaseResponse> {
+  const req = superagent.post(`${host}/billing/purchases/${key}/refresh`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
