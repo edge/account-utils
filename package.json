@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@edge/cache-config": "^1.1.0",
+    "@edge/xe-utils": "^1.11.1",
     "superagent": "^9.0.2"
   }
 }
