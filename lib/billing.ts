@@ -1,4 +1,6 @@
+import type * as account from './account'
 import * as xe from '@edge/xe-utils'
+import Stripe from 'stripe'
 import superagent from 'superagent'
 import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.'
 
@@ -137,6 +139,17 @@ export interface Payment extends Key, Timestamps {
   tx: PaymentTransaction
 }
 
+export interface PaymentMethod extends Key, Partial<StripePaymentMethod>, Timestamps {
+  /** Account key */
+  account: string
+  /** Payment method name */
+  name: string
+  /** Status of payment method */
+  status: 'invalid' | 'ok'
+  /** Last error message if payment method invalidated */
+  lastError?: string
+}
+
 export type PaymentTransaction = Omit<xe.tx.Tx, 'hash'> & Partial<Pick<xe.tx.Tx, 'hash'>>
 
 export interface Purchase extends Key, Partial<StripePurchase>, Timestamps {
@@ -172,13 +185,25 @@ export interface Purchase extends Key, Partial<StripePurchase>, Timestamps {
 
 export type PurchaseTransaction = Omit<xe.tx.Tx, 'hash'> & Partial<Pick<xe.tx.Tx, 'hash'>>
 
-export interface StripePurchase {
-  intent: Record<string, unknown> & {
-    client_secret: string | null
-    customer: unknown
-    id: string
-    status: string
+export interface StripePaymentMethod {
+  stripe: Pick<Stripe.PaymentMethod, 'id' | 'customer'> & {
+    card?: Pick<NonNullable<Stripe.PaymentMethod['card']>, 'brand' | 'exp_month' | 'exp_year' | 'last4'>
   }
+}
+
+export interface StripePurchase {
+  intent: Stripe.Response<Pick<Stripe.PaymentIntent, 'id' | 'client_secret' | 'customer' | 'status'>>
+}
+
+export interface AddPaymentMethodRequest {
+  account: string
+  name: string
+  stripe?: string
+}
+
+export interface AddPaymentMethodResponse {
+  paymentMethod: PaymentMethod
+  message: string
 }
 
 export interface BeginStripePurchaseRequest {
@@ -202,6 +227,21 @@ export interface CancelPurchaseResponse {
   message: string
 }
 
+export interface CreateStripeSetupIntentRequest {
+  account: string
+}
+
+export interface CreateStripeSetupIntentResponse {
+  setup: Stripe.Response<Stripe.SetupIntent>
+  message: string
+}
+
+export interface DeletePaymentMethodResponse {
+  account: account.Account
+  paymentMethod: PaymentMethod
+  message: string
+}
+
 export type GetAccountBalanceResponse = AccountBalance
 
 export interface GetBillingChargesParams extends PaginationParams, PeriodParams {
@@ -221,6 +261,16 @@ export interface GetInvoicesParams extends PaginationParams, PeriodParams {
   status?: string | string[]
 
   search?: string
+}
+
+export interface GetPaymentMethodResponse {
+  paymentMethod: PaymentMethod
+}
+
+export interface GetPaymentMethodsParams extends PaginationParams, PeriodParams {
+  key?: string | string[]
+  account?: string | string[]
+  status?: string | string[]
 }
 
 export interface GetPaymentsParams extends PaginationParams, PeriodParams {
@@ -256,6 +306,12 @@ export interface UnholdInvoiceResponse {
   payment?: Payment
 }
 
+export async function addPaymentMethod(host: string, token: string, data: AddPaymentMethodRequest, cb?: RequestCallback): Promise<AddPaymentMethodResponse> {
+  const req = superagent.post(`${host}/billing/paymentMethods`).set('Authorization', `Bearer ${token}`).send(data)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
 // eslint-disable-next-line max-len
 export async function beginStripePurchase(host: string, token: string, data: BeginStripePurchaseRequest, cb?: RequestCallback): Promise<BeginStripePurchaseResponse> {
   const req = superagent.post(`${host}/billing/purchases`).set('Authorization', `Bearer ${token}`).send(data)
@@ -265,6 +321,19 @@ export async function beginStripePurchase(host: string, token: string, data: Beg
 
 export async function cancelPurchase(host: string, token: string, key: string, cb?: RequestCallback): Promise<CancelPurchaseResponse> {
   const req = superagent.post(`${host}/billing/purchases/${key}/cancel`).set('Authorization', `Bearer ${token}`)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+// eslint-disable-next-line max-len
+export async function createStripeSetupIntent(host: string, token: string, data: CreateStripeSetupIntentRequest, cb?: RequestCallback): Promise<CreateStripeSetupIntentResponse> {
+  const req = superagent.post(`${host}/billing/paymentMethods/setup/stripe`).set('Authorization', `Bearer ${token}`).send(data)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function deletePaymentMethod(host: string, token: string, key: string, cb?: RequestCallback): Promise<DeletePaymentMethodResponse> {
+  const req = superagent.delete(`${host}/billing/paymentMethods/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
@@ -300,6 +369,20 @@ export async function getInvoices(host: string, token: string, params?: GetInvoi
 
 export async function getPayment(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetPaymentResponse> {
   const req = superagent.get(`${host}/billing/payments/${key}`).set('Authorization', `Bearer ${token}`)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function getPaymentMethod(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetPaymentMethodResponse> {
+  const req = superagent.get(`${host}/billing/paymentMethods/${key}`).set('Authorization', `Bearer ${token}`)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+// eslint-disable-next-line max-len
+export async function getPaymentMethods(host: string, token: string, params?: GetPaymentMethodsParams, cb?: RequestCallback): Promise<SearchResponse<PaymentMethod>> {
+  const req = superagent.get(`${host}/billing/paymentMethods`).set('Authorization', `Bearer ${token}`)
+  params && req.query(params)
   const res = await cb?.(req) || await req
   return res.body
 }
