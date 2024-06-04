@@ -1,7 +1,7 @@
 import { RequestCallback } from '.'
 import superagent from 'superagent'
 
-export type CdnGraphRange = 'hourly' | 'daily'
+export type CdnGraphRange = 'daily' | 'hourly'
 
 export interface DeleteCdnCacheRequest {
   path: string

@@ -48,6 +48,26 @@ export interface ContentDeliveryIntegration {
  */
 export type Integration = ContentDeliveryIntegration | PageIntegration | StorageIntegration
 
+export interface IntegrationUsage {
+  start: number
+  end: number
+  cdn: {
+    requests: {
+      cached: number
+      uncached: number
+    }
+    data: {
+      in: {
+        uncached: number
+      }
+      out: {
+        cached: number
+        uncached: number
+      }
+    }
+  }
+}
+
 /** Page configuration. */
 export interface PageConfig {
   domain: string
@@ -100,6 +120,17 @@ export interface DeleteIntegrationResponse {
   integration: AccountIntegration
 }
 
+export interface GetInstantIntegrationUsageParams {
+  integration?: string | string[]
+  account?: string
+}
+
+export interface GetInstantIntegrationUsageResponse {
+  [key: string]: IntegrationUsage
+}
+
+export type GetIntegrationUsageResponse = IntegrationUsage[]
+
 export interface GetIntegrationResponse {
   integration: AccountIntegration
 }
@@ -123,6 +154,8 @@ export interface UpdateIntegrationResponse {
   integration: AccountIntegration
 }
 
+export type UsageDataRange = 'daily' | 'hourly'
+
 export async function checkIntegrationDnsRecords(host: string, token: string, key: string, cb?: RequestCallback): Promise<CheckIntegrationDnsRecordsResponse> {
   const req = superagent.get(`${host}/integrations/${key}/dns`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
@@ -141,8 +174,23 @@ export async function deleteIntegration(host: string, token: string, key: string
   return res.body
 }
 
+// eslint-disable-next-line max-len
+export async function getInstantIntegrationUsage(host: string, token: string, params?: GetInstantIntegrationUsageParams, cb?: RequestCallback): Promise<GetInstantIntegrationUsageResponse> {
+  const req = superagent.get(`${host}/integrations/usage/instant`).set('Authorization', `Bearer ${token}`)
+  params && req.query(params)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
 export async function getIntegration(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetIntegrationResponse> {
   const req = superagent.get(`${host}/integrations/${key}`).set('Authorization', `Bearer ${token}`)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+// eslint-disable-next-line max-len
+export async function getIntegrationUsage(host: string, token: string, key: string, range: UsageDataRange, cb?: RequestCallback): Promise<GetIntegrationUsageResponse> {
+  const req = superagent.get(`${host}/integrations/${key}/usage/${range}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
