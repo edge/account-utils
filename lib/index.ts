@@ -1,6 +1,7 @@
 export * from './account'
 export * from './announcement'
 export * from './billing'
+export * from './cdn'
 export * from './dns'
 export * from './error'
 export * from './integration'
