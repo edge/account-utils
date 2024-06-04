@@ -301,6 +301,26 @@ export interface RefreshPurchaseResponse {
   message?: string
 }
 
+export interface RemoveDefaultPaymentMethodRequest {
+  account: string
+}
+
+export interface RemoveDefaultPaymentMethodResponse {
+  account: account.Account
+  message: string
+}
+
+export interface SetDefaultPaymentMethodRequest {
+  account: string
+  paymentMethod: string
+}
+
+export interface SetDefaultPaymentMethodResponse {
+  account: account.Account
+  paymentMethod: PaymentMethod
+  message: string
+}
+
 export interface UnholdInvoiceResponse {
   invoice: Invoice
   payment?: Payment
@@ -445,6 +465,20 @@ export async function getPurchases(host: string, token: string, params?: GetPurc
 
 export async function refreshPurchase(host: string, token: string, key: string, cb?: RequestCallback): Promise<RefreshPurchaseResponse> {
   const req = superagent.post(`${host}/billing/purchases/${key}/refresh`).set('Authorization', `Bearer ${token}`)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+// eslint-disable-next-line max-len
+export async function removeDefaultPaymentMethod(host: string, token: string, data: RemoveDefaultPaymentMethodRequest, cb?: RequestCallback): Promise<RemoveDefaultPaymentMethodResponse> {
+  const req = superagent.delete(`${host}/account/topup`).set('Authorization', `Bearer ${token}`).send(data)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+// eslint-disable-next-line max-len
+export async function setDefaultPaymentMethod(host: string, token: string, data: SetDefaultPaymentMethodRequest, cb?: RequestCallback): Promise<SetDefaultPaymentMethodResponse> {
+  const req = superagent.post(`${host}/account/topup`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
