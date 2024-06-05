@@ -19,7 +19,7 @@ export * from './session'
 export * from './storage'
 export * from './task'
 
-import { SuperAgentRequest } from 'superagent'
+import type { SuperAgentRequest } from 'superagent'
 
 export interface Key {
   _key: string

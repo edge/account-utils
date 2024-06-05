@@ -95,7 +95,7 @@ export async function getPromoEntitlement(host: string, token: string, key: stri
 }
 
 // eslint-disable-next-line max-len
-export async function getPromoEntitlements(host: string, token: string, params: GetPromoEntitlementsParams, cb?: RequestCallback): Promise<SearchResponse<PromoEntitlement>> {
+export async function getPromoEntitlements(host: string, token: string, params?: GetPromoEntitlementsParams, cb?: RequestCallback): Promise<SearchResponse<PromoEntitlement>> {
   const req = superagent.get(`${host}/promos/entitlements`).set('Authorization', `Bearer ${token}`)
   params && req.query(params)
   const res = await cb?.(req) || await req
