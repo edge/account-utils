@@ -48,6 +48,11 @@ export interface GetConfigResponse {
   }
 }
 
+export interface GetInfoResponse {
+  name: string
+  version: string
+}
+
 export interface ParseDomainResponse {
   domain: string
   apex: boolean
@@ -55,6 +60,12 @@ export interface ParseDomainResponse {
 
 export async function getConfig(host: string, cb?: RequestCallback): Promise<GetConfigResponse> {
   const req = superagent.get(`${host}/config`)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function getInfo(host: string, cb?: RequestCallback): Promise<GetInfoResponse> {
+  const req = superagent.get(`${host}/`)
   const res = await cb?.(req) || await req
   return res.body
 }
