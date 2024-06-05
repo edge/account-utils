@@ -1,4 +1,4 @@
-import { Key, RequestCallback, SearchResponse } from '.';
+import { Key, PaginationParams, RequestCallback, SearchResponse } from '.';
 /** OS image */
 export interface OS extends Key {
     /** Backend ID */
@@ -12,9 +12,7 @@ export interface OS extends Key {
     /** Active flag */
     active: boolean;
 }
-export interface GetOSParams {
-    limit?: number;
-    page?: number;
+export interface GetOSParams extends Omit<PaginationParams, 'sort'> {
 }
 export interface GetOSResponse {
     os: OS;

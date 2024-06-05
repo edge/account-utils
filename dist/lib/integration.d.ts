@@ -1,5 +1,5 @@
 import { Config } from '@edge/cache-config';
-import { Key, RequestCallback, SearchResponse, Timestamps } from '.';
+import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.';
 /**
  * Integration as saved to an account.
  */
@@ -42,6 +42,25 @@ export interface ContentDeliveryIntegration {
  * Can be any type of integration, and should be disambiguated in user code based on `service`.
  */
 export type Integration = ContentDeliveryIntegration | PageIntegration | StorageIntegration;
+export interface IntegrationUsage {
+    start: number;
+    end: number;
+    cdn: {
+        requests: {
+            cached: number;
+            uncached: number;
+        };
+        data: {
+            in: {
+                uncached: number;
+            };
+            out: {
+                cached: number;
+                uncached: number;
+            };
+        };
+    };
+}
 /** Page configuration. */
 export interface PageConfig {
     domain: string;
@@ -85,10 +104,18 @@ export interface CreateIntegrationResponse {
 export interface DeleteIntegrationResponse {
     integration: AccountIntegration;
 }
+export interface GetInstantIntegrationUsageParams {
+    integration?: string | string[];
+    account?: string;
+}
+export interface GetInstantIntegrationUsageResponse {
+    [key: string]: IntegrationUsage;
+}
+export type GetIntegrationUsageResponse = IntegrationUsage[];
 export interface GetIntegrationResponse {
     integration: AccountIntegration;
 }
-export interface GetIntegrationsParams {
+export interface GetIntegrationsParams extends PaginationParams, PeriodParams {
     key?: string | string[];
     account?: string | string[];
     name?: string | string[];
@@ -96,20 +123,18 @@ export interface GetIntegrationsParams {
     service?: string | string[];
     active?: boolean;
     suspended?: boolean;
-    since?: number;
-    until?: number;
-    limit?: number;
-    page?: number;
     search?: string;
-    sort?: string | string[];
 }
 export type UpdateIntegrationRequest = Pick<AccountIntegration, 'account' | 'name' | 'data' | 'configMode'>;
 export interface UpdateIntegrationResponse {
     integration: AccountIntegration;
 }
+export type UsageDataRange = 'daily' | 'hourly';
 export declare function checkIntegrationDnsRecords(host: string, token: string, key: string, cb?: RequestCallback): Promise<CheckIntegrationDnsRecordsResponse>;
 export declare function createIntegration(host: string, token: string, data: CreateIntegrationRequest, cb?: RequestCallback): Promise<CreateIntegrationResponse>;
 export declare function deleteIntegration(host: string, token: string, key: string, cb?: RequestCallback): Promise<DeleteIntegrationResponse>;
+export declare function getInstantIntegrationUsage(host: string, token: string, params?: GetInstantIntegrationUsageParams, cb?: RequestCallback): Promise<GetInstantIntegrationUsageResponse>;
 export declare function getIntegration(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetIntegrationResponse>;
+export declare function getIntegrationUsage(host: string, token: string, key: string, range: UsageDataRange, cb?: RequestCallback): Promise<GetIntegrationUsageResponse>;
 export declare function getIntegrations(host: string, token: string, params?: GetIntegrationsParams, cb?: RequestCallback): Promise<SearchResponse<AccountIntegration>>;
 export declare function updateIntegration(host: string, token: string, key: string, data: UpdateIntegrationRequest, cb?: RequestCallback): Promise<UpdateIntegrationResponse>;

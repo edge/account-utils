@@ -1,5 +1,5 @@
 import * as task from './task';
-import { Key, RequestCallback, SearchResponse, Timestamps } from '.';
+import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.';
 /** Server backup. */
 export interface Backup extends Key, Timestamps {
     /** Account key */
@@ -35,16 +35,11 @@ export interface DeleteServerBackupResponse {
 export interface GetServerBackupResponse {
     backup: Backup;
 }
-export interface GetServerBackupsParams {
+export interface GetServerBackupsParams extends PaginationParams, PeriodParams {
     key?: string | string[];
     account?: string | string[];
     server?: string | string[];
     status?: string | string[];
-    since?: number;
-    until?: number;
-    limit?: number;
-    page?: number;
-    sort?: string | string[];
 }
 /** @todo review and patch: https://github.com/edge/account-api/issues/317 */
 export interface GetServerBackupsUsageResponse {

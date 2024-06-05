@@ -88,7 +88,7 @@ export interface CreateAccountRequest {
 }
 export interface CreateAccountResponse {
     account: Account;
-    entitlement?: promo.Entitlement;
+    entitlement?: promo.PromoEntitlement;
     session: session.Session;
 }
 export interface GetAccountResponse {

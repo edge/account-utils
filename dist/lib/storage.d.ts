@@ -1,4 +1,4 @@
-import { RequestCallback, SearchResponse } from '.';
+import { PaginationParams, RequestCallback, SearchResponse } from '.';
 export interface File {
     integration: string;
     id: string;
@@ -30,14 +30,9 @@ export interface DeleteStorageNodeResponse {
     node?: Node;
     affected: number;
 }
-export interface GetStorageFilesParams {
-    limit?: number;
-    page?: number;
+export interface GetStorageFilesParams extends Omit<PaginationParams, 'sort'> {
 }
-export interface GetStorageNodeParams {
-    limit?: number;
-    page?: number;
-    sort?: string | string[];
+export interface GetStorageNodeParams extends PaginationParams {
     foldersTop?: boolean;
 }
 export interface GetStorageNodeResponse {
