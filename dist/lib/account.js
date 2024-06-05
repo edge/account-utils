@@ -44,6 +44,7 @@ async function getAccountReferredAccounts(host, token, cb) {
     return res.body;
 }
 exports.getAccountReferredAccounts = getAccountReferredAccounts;
+// eslint-disable-next-line max-len
 async function removeAccountEmail(host, token, data, cb) {
     const req = superagent_1.default.delete(`${host}/account/email`).set('Authorization', `Bearer ${token}`).send(data);
     const res = await cb?.(req) || await req;
@@ -75,12 +76,14 @@ async function updateAccount(host, token, data, cb) {
     return res.body;
 }
 exports.updateAccount = updateAccount;
+// eslint-disable-next-line max-len
 async function updateAccountEmail(host, token, data, cb) {
     const req = superagent_1.default.put(`${host}/account/email`).set('Authorization', `Bearer ${token}`).send(data);
     const res = await cb?.(req) || await req;
     return res.body;
 }
 exports.updateAccountEmail = updateAccountEmail;
+// eslint-disable-next-line max-len
 async function verifyAccountEmail(host, token, data, cb) {
     const req = superagent_1.default.post(`${host}/account/email/verify`).set('Authorization', `Bearer ${token}`).send(data);
     const res = await cb?.(req) || await req;
