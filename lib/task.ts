@@ -34,7 +34,7 @@ export interface GetTasksParams extends PeriodParams, PaginationParams {
 }
 
 export async function getTask(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetTaskResponse> {
-  const req = superagent.get(`${host}/tasks/${key}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/task/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }

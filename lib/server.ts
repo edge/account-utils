@@ -245,6 +245,15 @@ export async function getServers(host: string, token: string, params?: GetServer
   return res.body
 }
 
+/** @todo */
+// eslint-disable-next-line max-len
+// export async function getServersUsage(host: string, token: string, params?: GetServersUsageParams, cb?: RequestCallback): Promise<SearchResponse<ServerUsage>> {
+//   const req = superagent.get(`${host}/servers/usage`).set('Authorization', `Bearer ${token}`)
+//   params && req.query(params)
+//   const res = await cb?.(req) || await req
+//   return res.body
+// }
+
 export async function removeServerBackupStrategy(host: string, token: string, key: string, cb?: RequestCallback): Promise<RemoveServerBackupStrategyResponse> {
   const req = superagent.delete(`${host}/server/${key}/backups/strategy`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req

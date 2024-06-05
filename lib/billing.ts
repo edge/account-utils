@@ -340,7 +340,7 @@ export async function beginStripePurchase(host: string, token: string, data: Beg
 }
 
 export async function cancelPurchase(host: string, token: string, key: string, cb?: RequestCallback): Promise<CancelPurchaseResponse> {
-  const req = superagent.post(`${host}/billing/purchases/${key}/cancel`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.post(`${host}/billing/purchase/${key}/cancel`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
@@ -353,7 +353,7 @@ export async function createStripeSetupIntent(host: string, token: string, data:
 }
 
 export async function deletePaymentMethod(host: string, token: string, key: string, cb?: RequestCallback): Promise<DeletePaymentMethodResponse> {
-  const req = superagent.delete(`${host}/billing/paymentMethods/${key}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.delete(`${host}/billing/paymentMethod/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
@@ -377,7 +377,7 @@ export async function downloadInvoice(host: string, token: string, key: string, 
     filename = undefined
   }
 
-  const req = superagent.get(`${host}/billing/invoices/${key}/download`)
+  const req = superagent.get(`${host}/billing/invoice/${key}/download`)
     .responseType('blob')
     .set('Authorization', `Bearer ${token}`)
 
@@ -411,7 +411,7 @@ export async function getBillingCharges(host: string, token: string, params?: Ge
 }
 
 export async function getInvoice(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetInvoiceResponse> {
-  const req = superagent.get(`${host}/billing/invoices/${key}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/billing/invoice/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
@@ -424,13 +424,13 @@ export async function getInvoices(host: string, token: string, params?: GetInvoi
 }
 
 export async function getPayment(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetPaymentResponse> {
-  const req = superagent.get(`${host}/billing/payments/${key}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/billing/payment/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
 
 export async function getPaymentMethod(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetPaymentMethodResponse> {
-  const req = superagent.get(`${host}/billing/paymentMethods/${key}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/billing/paymentMethod/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
@@ -451,7 +451,7 @@ export async function getPayments(host: string, token: string, params?: GetPayme
 }
 
 export async function getPurchase(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetPurchaseResponse> {
-  const req = superagent.get(`${host}/billing/purchases/${key}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/billing/purchase/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
@@ -464,7 +464,7 @@ export async function getPurchases(host: string, token: string, params?: GetPurc
 }
 
 export async function refreshPurchase(host: string, token: string, key: string, cb?: RequestCallback): Promise<RefreshPurchaseResponse> {
-  const req = superagent.post(`${host}/billing/purchases/${key}/refresh`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.post(`${host}/billing/purchase/${key}/refresh`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
@@ -484,7 +484,7 @@ export async function setDefaultPaymentMethod(host: string, token: string, data:
 }
 
 export async function unholdInvoice(host: string, token: string, key: string, cb?: RequestCallback): Promise<UnholdInvoiceResponse> {
-  const req = superagent.post(`${host}/billing/invoices/${key}/unhold`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.post(`${host}/billing/invoice/${key}/unhold`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }

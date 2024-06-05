@@ -117,7 +117,7 @@ export async function deleteDnsZone(host: string, token: string, zone: string, c
 }
 
 export async function deleteDnsZoneRecord(host: string, token: string, zone: string, key: string, cb?: RequestCallback): Promise<DeleteDnsZoneRecordResponse> {
-  const req = superagent.delete(`${host}/dns/${zone}/records/${key}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.delete(`${host}/dns/${zone}/record/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
@@ -129,7 +129,7 @@ export async function getDnsZone(host: string, token: string, zone: string, cb?:
 }
 
 export async function getDnsZoneRecord(host: string, token: string, zone: string, key: string, cb?: RequestCallback): Promise<GetDnsZoneRecordResponse> {
-  const req = superagent.get(`${host}/dns/${zone}/records/${key}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/dns/${zone}/record/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
@@ -151,7 +151,7 @@ export async function getDnsZones(host: string, token: string, params?: GetDnsZo
 
 // eslint-disable-next-line max-len
 export async function updateDnsZoneRecord(host: string, token: string, zone: string, key: string, data: UpdateDnsZoneRecordRequest, cb?: RequestCallback): Promise<UpdateDnsZoneRecordResponse> {
-  const req = superagent.put(`${host}/dns/${zone}/records/${key}`).set('Authorization', `Bearer ${token}`).send(data)
+  const req = superagent.put(`${host}/dns/${zone}/record/${key}`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }

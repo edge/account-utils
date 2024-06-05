@@ -83,20 +83,20 @@ export interface RedeemPromoCodeResponse {
 }
 
 export async function deletePromoEntitlement(host: string, token: string, key: string, cb?: RequestCallback): Promise<DeletePromoEntitlementResponse> {
-  const req = superagent.delete(`${host}/entitlements/${key}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.delete(`${host}/promos/entitlement/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
 
 export async function getPromoEntitlement(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetPromoEntitlementResponse> {
-  const req = superagent.get(`${host}/entitlements/${key}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/promos/entitlement/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
 
 // eslint-disable-next-line max-len
 export async function getPromoEntitlements(host: string, token: string, params: GetPromoEntitlementsParams, cb?: RequestCallback): Promise<SearchResponse<PromoEntitlement>> {
-  const req = superagent.get(`${host}/entitlements`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/promos/entitlements`).set('Authorization', `Bearer ${token}`)
   params && req.query(params)
   const res = await cb?.(req) || await req
   return res.body
@@ -116,13 +116,13 @@ export async function redeemPromoCode(host: string, token: string, key: string |
   if (typeof key === 'string') {
     if (!data || typeof data === 'function') throw new Error('invalid data for redeemPromoCode')
 
-    const req = superagent.post(`${host}/promos/${key}/redeem`).set('Authorization', `Bearer ${token}`).send(data)
+    const req = superagent.post(`${host}/promo/${key}/redeem`).set('Authorization', `Bearer ${token}`).send(data)
     const res = await cb?.(req) || await req
     return res.body
   }
 
   // Standard form
-  const req = superagent.post(`${host}/redeem`).set('Authorization', `Bearer ${token}`).send(data)
+  const req = superagent.post(`${host}/promos/redeem`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }

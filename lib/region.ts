@@ -53,7 +53,7 @@ export interface GetRegionResponse {
 export interface GetRegionsParams extends Omit<PaginationParams, 'sort'> {}
 
 export async function getRegion(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetRegionResponse> {
-  const req = superagent.get(`${host}/regions/${key}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/region/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
