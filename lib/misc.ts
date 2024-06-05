@@ -72,7 +72,7 @@ export async function getInfo(host: string, cb?: RequestCallback): Promise<GetIn
 
 /** Parse a domain to determine whether it is an apex or subdomain. */
 export async function parseDomain(host: string, token: string, domain: string, cb?: RequestCallback): Promise<ParseDomainResponse> {
-  const req = superagent.delete(`${host}/psl/parse/${domain}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/psl/parse/${domain}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
