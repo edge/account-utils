@@ -1,5 +1,5 @@
 import superagent from 'superagent'
-import { Key, RequestCallback, SearchResponse, Timestamps } from '.'
+import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.'
 
 export interface Task extends Key, Timestamps {
   /** Account key */
@@ -24,24 +24,17 @@ export interface GetTaskResponse {
   task: Task
 }
 
-export interface GetTasksParams {
+export interface GetTasksParams extends PeriodParams, PaginationParams {
   key?: string | string[]
   account?: string | string[]
   batch?: string | string[]
   entity?: string | string[]
   action?: string | string[]
   status?: string | string[]
-
-  since?: number
-  until?: number
-
-  limit?: number
-  page?: number
-  sort?: string | string[]
 }
 
 export async function getTask(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetTaskResponse> {
-  const req = superagent.get(`${host}/tasks/${key}`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/task/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }

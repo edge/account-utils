@@ -61,19 +61,20 @@ export interface Account extends Key, Timestamps {
     /** Disabled account flag. */
     disabled?: boolean;
 }
-export interface AddEmailRequest {
+export interface AddAccountEmailRequest {
     account: string;
     address: string;
 }
-export interface AddEmailResponse {
+export interface AddAccountEmailResponse {
     account: Account;
     message: string;
 }
-export interface AddTOTPRequest {
+export interface AddAccountTOTPRequest {
+    account: string;
     secret?: string;
     otp?: string;
 }
-export interface AddTOTPResponse {
+export interface AddAccountTOTPResponse {
     account: Account;
     totp: {
         _key: string;
@@ -88,7 +89,7 @@ export interface CreateAccountRequest {
 }
 export interface CreateAccountResponse {
     account: Account;
-    entitlement?: promo.Entitlement;
+    entitlement?: promo.PromoEntitlement;
     session: session.Session;
 }
 export interface GetAccountResponse {
@@ -104,28 +105,28 @@ export interface GetReferredAccountsResponse {
         totalCount: number;
     };
 }
-export interface RemoveEmailRequest {
+export interface RemoveAccountEmailRequest {
     account: string;
 }
-export interface RemoveEmailResponse {
+export interface RemoveAccountEmailResponse {
     account: Account;
     message: string;
 }
-export interface RemoveTOTPRequest {
+export interface RemoveAccountTOTPRequest {
     account: string;
     totp?: string;
     otp?: string;
     backupCode?: string;
 }
-export interface RemoveTOTPResponse {
+export interface RemoveAccountTOTPResponse {
     /** Excluded if the account does not have a TOTP. */
     account?: Account;
     message: string;
 }
-export interface ResendVerificationEmailData {
+export interface ResendAccountVerificationEmailData {
     account: string;
 }
-export interface ResendVerificationEmailResponse {
+export interface ResendAccountVerificationEmailResponse {
     account: Account;
     message: string;
 }
@@ -145,19 +146,19 @@ export interface UpdateAccountRequest {
 export interface UpdateAccountResponse {
     account: Account;
 }
-export interface UpdateEmailRequest {
+export interface UpdateAccountEmailRequest {
     account: string;
     address: string;
 }
-export interface UpdateEmailResponse {
+export interface UpdateAccountEmailResponse {
     account: Account;
     message: string;
 }
-export interface VerifyEmailRequest {
+export interface VerifyAccountEmailRequest {
     account: string;
     secret: string;
 }
-export interface VerifyEmailResponse {
+export interface VerifyAccountEmailResponse {
     account: Account;
     message: string;
 }
@@ -166,17 +167,17 @@ export interface VerifyMagicLinkTokenResponse {
     address: string;
     message: string;
 }
-export declare function addAccountEmail(host: string, token: string, data: AddEmailRequest, cb?: RequestCallback): Promise<AddEmailResponse>;
-export declare function addAccountTOTP(host: string, token: string, data: AddTOTPRequest, cb?: RequestCallback): Promise<AddTOTPResponse>;
+export declare function addAccountEmail(host: string, token: string, data: AddAccountEmailRequest, cb?: RequestCallback): Promise<AddAccountEmailResponse>;
+export declare function addAccountTOTP(host: string, token: string, data: AddAccountTOTPRequest, cb?: RequestCallback): Promise<AddAccountTOTPResponse>;
 export declare function createAccount(host: string, data?: CreateAccountRequest, cb?: RequestCallback): Promise<CreateAccountResponse>;
 export declare function getAccount(host: string, token: string, cb?: RequestCallback): Promise<GetAccountResponse>;
 export declare function getAccountProgress(host: string, token: string, cb?: RequestCallback): Promise<GetProgressResponse>;
 export declare function getAccountReferredAccounts(host: string, token: string, cb?: RequestCallback): Promise<GetReferredAccountsResponse>;
-export declare function removeAccountEmail(host: string, token: string, data: RemoveEmailRequest, cb?: RequestCallback): Promise<RemoveEmailResponse>;
-export declare function removeAccountTOTP(host: string, token: string, data: RemoveTOTPRequest, cb?: RequestCallback): Promise<RemoveTOTPResponse>;
-export declare function resendAccountVerificationEmail(host: string, token: string, data: ResendVerificationEmailData, cb?: RequestCallback): Promise<ResendVerificationEmailResponse>;
+export declare function removeAccountEmail(host: string, token: string, data: RemoveAccountEmailRequest, cb?: RequestCallback): Promise<RemoveAccountEmailResponse>;
+export declare function removeAccountTOTP(host: string, token: string, data: RemoveAccountTOTPRequest, cb?: RequestCallback): Promise<RemoveAccountTOTPResponse>;
+export declare function resendAccountVerificationEmail(host: string, token: string, data: ResendAccountVerificationEmailData, cb?: RequestCallback): Promise<ResendAccountVerificationEmailResponse>;
 export declare function sendAccountMagicLink(host: string, data: SendMagicLinkRequest, cb?: RequestCallback): Promise<SendMagicLinkResponse>;
 export declare function updateAccount(host: string, token: string, data: UpdateAccountRequest, cb?: RequestCallback): Promise<UpdateAccountResponse>;
-export declare function updateAccountEmail(host: string, token: string, data: UpdateEmailRequest, cb?: RequestCallback): Promise<UpdateEmailResponse>;
-export declare function verifyAccountEmail(host: string, token: string, data: VerifyEmailRequest, cb?: RequestCallback): Promise<VerifyEmailResponse>;
+export declare function updateAccountEmail(host: string, token: string, data: UpdateAccountEmailRequest, cb?: RequestCallback): Promise<UpdateAccountEmailResponse>;
+export declare function verifyAccountEmail(host: string, token: string, data: VerifyAccountEmailRequest, cb?: RequestCallback): Promise<VerifyAccountEmailResponse>;
 export declare function verifyAccountMagicLinkToken(host: string, token: string, cb?: RequestCallback): Promise<VerifyMagicLinkTokenResponse>;

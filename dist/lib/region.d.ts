@@ -1,4 +1,4 @@
-import { Key, RequestCallback, SearchResponse } from '.';
+import { Key, PaginationParams, RequestCallback, SearchResponse } from '.';
 /** Network region */
 export interface Region extends Key {
     /** Cluster IDs */
@@ -46,9 +46,7 @@ export interface Region extends Key {
 export interface GetRegionResponse {
     region: Region;
 }
-export interface GetRegionsParams {
-    limit?: number;
-    page?: number;
+export interface GetRegionsParams extends Omit<PaginationParams, 'sort'> {
 }
 export declare function getRegion(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetRegionResponse>;
 export declare function getRegions(host: string, token: string, params?: GetRegionsParams, cb?: RequestCallback): Promise<SearchResponse<Region>>;

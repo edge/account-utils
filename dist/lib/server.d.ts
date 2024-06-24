@@ -1,5 +1,5 @@
 import type * as task from './task';
-import { Key, RequestCallback, SearchResponse, Timestamps } from '.';
+import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.';
 /** Deployed server */
 export interface Server extends Key, Timestamps {
     /** Account key */
@@ -101,17 +101,14 @@ export interface GetServerMetricsResponse {
 export interface GetServerResponse {
     server: Server;
 }
-export interface GetServerTasksParams {
-    limit?: number;
-    page?: number;
-    sort?: string | string[];
+export interface GetServerTasksParams extends PaginationParams {
 }
 export interface GetServerVncCredentialsResponse {
     password: string;
     server: string;
     session: string;
 }
-export interface GetServersParams {
+export interface GetServersParams extends PaginationParams, PeriodParams {
     key?: string | string[];
     account?: string | string[];
     region?: string | string[];
@@ -119,11 +116,6 @@ export interface GetServersParams {
     suspended?: boolean;
     name?: string | string[];
     domain?: string | string[];
-    since?: string | string[];
-    until?: string | string[];
-    limit?: number;
-    page?: number;
-    sort?: string | string[];
     search?: string;
 }
 export interface RemoveServerBackupStrategyResponse {
@@ -177,6 +169,7 @@ export declare function getServerTasks(host: string, token: string, key: string,
  */
 export declare function getServerVncCredentials(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetServerVncCredentialsResponse>;
 export declare function getServers(host: string, token: string, params?: GetServersParams, cb?: RequestCallback): Promise<SearchResponse<Server>>;
+/** @todo */
 export declare function removeServerBackupStrategy(host: string, token: string, key: string, cb?: RequestCallback): Promise<RemoveServerBackupStrategyResponse>;
 export declare function resizeServer(host: string, token: string, key: string, data: ResizeServerRequest, cb?: RequestCallback): Promise<ResizeServerResponse>;
 export declare function startServer(host: string, token: string, key: string, cb?: RequestCallback): Promise<StartServerResponse>;

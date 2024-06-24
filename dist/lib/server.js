@@ -61,6 +61,14 @@ async function getServers(host, token, params, cb) {
     return res.body;
 }
 exports.getServers = getServers;
+/** @todo */
+// eslint-disable-next-line max-len
+// export async function getServersUsage(host: string, token: string, params?: GetServersUsageParams, cb?: RequestCallback): Promise<SearchResponse<ServerUsage>> {
+//   const req = superagent.get(`${host}/servers/usage`).set('Authorization', `Bearer ${token}`)
+//   params && req.query(params)
+//   const res = await cb?.(req) || await req
+//   return res.body
+// }
 async function removeServerBackupStrategy(host, token, key, cb) {
     const req = superagent_1.default.delete(`${host}/server/${key}/backups/strategy`).set('Authorization', `Bearer ${token}`);
     const res = await cb?.(req) || await req;

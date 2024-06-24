@@ -1,21 +1,39 @@
 export * from './account'
 export * from './announcement'
+export * from './billing'
+export * from './cdn'
 export * from './dns'
+export * from './error'
 export * from './integration'
 export * from './misc'
+export * from './newsletter'
+export * from './notifications'
 export * from './os'
+export * from './product'
 export * from './promo'
 export * from './region'
 export * from './server'
 export * from './serverBackups'
+export * from './service'
 export * from './session'
 export * from './storage'
 export * from './task'
 
-import { SuperAgentRequest } from 'superagent'
+import type { SuperAgentRequest } from 'superagent'
 
 export interface Key {
   _key: string
+}
+
+export interface PaginationParams<T extends string = string> {
+  limit?: number
+  page?: number
+  sort?: T | T[]
+}
+
+export interface PeriodParams {
+  since?: number
+  until?: number
 }
 
 /**

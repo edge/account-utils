@@ -68,22 +68,23 @@ export interface Account extends Key, Timestamps {
   disabled?: boolean
 }
 
-export interface AddEmailRequest {
+export interface AddAccountEmailRequest {
   account: string
   address: string
 }
 
-export interface AddEmailResponse {
+export interface AddAccountEmailResponse {
   account: Account
   message: string
 }
 
-export interface AddTOTPRequest {
+export interface AddAccountTOTPRequest {
+  account: string
   secret?: string
   otp?: string
 }
 
-export interface AddTOTPResponse {
+export interface AddAccountTOTPResponse {
   account: Account
   totp: {
     _key: string
@@ -100,7 +101,7 @@ export interface CreateAccountRequest {
 
 export interface CreateAccountResponse {
   account: Account
-  entitlement?: promo.Entitlement
+  entitlement?: promo.PromoEntitlement
   session: session.Session
 }
 
@@ -120,33 +121,33 @@ export interface GetReferredAccountsResponse {
   }
 }
 
-export interface RemoveEmailRequest {
+export interface RemoveAccountEmailRequest {
   account: string
 }
 
-export interface RemoveEmailResponse {
+export interface RemoveAccountEmailResponse {
   account: Account
   message: string
 }
 
-export interface RemoveTOTPRequest {
+export interface RemoveAccountTOTPRequest {
   account: string
   totp?: string
   otp?: string
   backupCode?: string
 }
 
-export interface RemoveTOTPResponse {
+export interface RemoveAccountTOTPResponse {
   /** Excluded if the account does not have a TOTP. */
   account?: Account
   message: string
 }
 
-export interface ResendVerificationEmailData {
+export interface ResendAccountVerificationEmailData {
   account: string
 }
 
-export interface ResendVerificationEmailResponse {
+export interface ResendAccountVerificationEmailResponse {
   account: Account
   message: string
 }
@@ -171,22 +172,22 @@ export interface UpdateAccountResponse {
   account: Account
 }
 
-export interface UpdateEmailRequest {
+export interface UpdateAccountEmailRequest {
   account: string
   address: string
 }
 
-export interface UpdateEmailResponse {
+export interface UpdateAccountEmailResponse {
   account: Account
   message: string
 }
 
-export interface VerifyEmailRequest {
+export interface VerifyAccountEmailRequest {
   account: string
   secret: string
 }
 
-export interface VerifyEmailResponse {
+export interface VerifyAccountEmailResponse {
   account: Account
   message: string
 }
@@ -197,13 +198,13 @@ export interface VerifyMagicLinkTokenResponse {
   message: string
 }
 
-export async function addAccountEmail(host: string, token: string, data: AddEmailRequest, cb?: RequestCallback): Promise<AddEmailResponse> {
+export async function addAccountEmail(host: string, token: string, data: AddAccountEmailRequest, cb?: RequestCallback): Promise<AddAccountEmailResponse> {
   const req = superagent.post(`${host}/account/email`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function addAccountTOTP(host: string, token: string, data: AddTOTPRequest, cb?: RequestCallback): Promise<AddTOTPResponse> {
+export async function addAccountTOTP(host: string, token: string, data: AddAccountTOTPRequest, cb?: RequestCallback): Promise<AddAccountTOTPResponse> {
   const req = superagent.post(`${host}/account/totp`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
@@ -233,20 +234,21 @@ export async function getAccountReferredAccounts(host: string, token: string, cb
   return res.body
 }
 
-export async function removeAccountEmail(host: string, token: string, data: RemoveEmailRequest, cb?: RequestCallback): Promise<RemoveEmailResponse> {
+// eslint-disable-next-line max-len
+export async function removeAccountEmail(host: string, token: string, data: RemoveAccountEmailRequest, cb?: RequestCallback): Promise<RemoveAccountEmailResponse> {
   const req = superagent.delete(`${host}/account/email`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function removeAccountTOTP(host: string, token: string, data: RemoveTOTPRequest, cb?: RequestCallback): Promise<RemoveTOTPResponse> {
+export async function removeAccountTOTP(host: string, token: string, data: RemoveAccountTOTPRequest, cb?: RequestCallback): Promise<RemoveAccountTOTPResponse> {
   const req = superagent.delete(`${host}/account/totp`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
 // eslint-disable-next-line max-len
-export async function resendAccountVerificationEmail(host: string, token: string, data: ResendVerificationEmailData, cb?: RequestCallback): Promise<ResendVerificationEmailResponse> {
+export async function resendAccountVerificationEmail(host: string, token: string, data: ResendAccountVerificationEmailData, cb?: RequestCallback): Promise<ResendAccountVerificationEmailResponse> {
   const req = superagent.post(`${host}/account/email/verify/resend`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
@@ -264,13 +266,15 @@ export async function updateAccount(host: string, token: string, data: UpdateAcc
   return res.body
 }
 
-export async function updateAccountEmail(host: string, token: string, data: UpdateEmailRequest, cb?: RequestCallback): Promise<UpdateEmailResponse> {
+// eslint-disable-next-line max-len
+export async function updateAccountEmail(host: string, token: string, data: UpdateAccountEmailRequest, cb?: RequestCallback): Promise<UpdateAccountEmailResponse> {
   const req = superagent.put(`${host}/account/email`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function verifyAccountEmail(host: string, token: string, data: VerifyEmailRequest, cb?: RequestCallback): Promise<VerifyEmailResponse> {
+// eslint-disable-next-line max-len
+export async function verifyAccountEmail(host: string, token: string, data: VerifyAccountEmailRequest, cb?: RequestCallback): Promise<VerifyAccountEmailResponse> {
   const req = superagent.post(`${host}/account/email/verify`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body

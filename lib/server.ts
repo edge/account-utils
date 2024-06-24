@@ -1,6 +1,6 @@
 import type * as task from './task'
 import superagent from 'superagent'
-import { Key, RequestCallback, SearchResponse, Timestamps } from '.'
+import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.'
 
 /** Deployed server */
 export interface Server extends Key, Timestamps {
@@ -121,11 +121,7 @@ export interface GetServerResponse {
   server: Server
 }
 
-export interface GetServerTasksParams {
-  limit?: number
-  page?: number
-  sort?: string | string[]
-}
+export interface GetServerTasksParams extends PaginationParams {}
 
 export interface GetServerVncCredentialsResponse {
   password: string
@@ -133,7 +129,7 @@ export interface GetServerVncCredentialsResponse {
   session: string
 }
 
-export interface GetServersParams {
+export interface GetServersParams extends PaginationParams, PeriodParams {
   key?: string | string[]
   account?: string | string[]
   region?: string | string[]
@@ -142,13 +138,6 @@ export interface GetServersParams {
 
   name?: string | string[]
   domain?: string | string[]
-
-  since?: string | string[]
-  until?: string | string[]
-
-  limit?: number
-  page?: number
-  sort?: string | string[]
 
   search?: string
 }
@@ -255,6 +244,15 @@ export async function getServers(host: string, token: string, params?: GetServer
   const res = await cb?.(req) || await req
   return res.body
 }
+
+/** @todo */
+// eslint-disable-next-line max-len
+// export async function getServersUsage(host: string, token: string, params?: GetServersUsageParams, cb?: RequestCallback): Promise<SearchResponse<ServerUsage>> {
+//   const req = superagent.get(`${host}/servers/usage`).set('Authorization', `Bearer ${token}`)
+//   params && req.query(params)
+//   const res = await cb?.(req) || await req
+//   return res.body
+// }
 
 export async function removeServerBackupStrategy(host: string, token: string, key: string, cb?: RequestCallback): Promise<RemoveServerBackupStrategyResponse> {
   const req = superagent.delete(`${host}/server/${key}/backups/strategy`).set('Authorization', `Bearer ${token}`)

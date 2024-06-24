@@ -1,6 +1,6 @@
 import { Config } from '@edge/cache-config'
 import superagent from 'superagent'
-import { Key, RequestCallback, SearchResponse, Timestamps } from '.'
+import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.'
 
 /**
  * Integration as saved to an account.
@@ -48,6 +48,26 @@ export interface ContentDeliveryIntegration {
  */
 export type Integration = ContentDeliveryIntegration | PageIntegration | StorageIntegration
 
+export interface IntegrationUsage {
+  start: number
+  end: number
+  cdn: {
+    requests: {
+      cached: number
+      uncached: number
+    }
+    data: {
+      in: {
+        uncached: number
+      }
+      out: {
+        cached: number
+        uncached: number
+      }
+    }
+  }
+}
+
 /** Page configuration. */
 export interface PageConfig {
   domain: string
@@ -90,21 +110,32 @@ export interface CheckIntegrationDnsRecordsResponse {
   }[]
 }
 
-export type CreateIntegrationRequest = Pick<AccountIntegration, 'account' | 'name' | 'data' | 'configMode'>
+export type CreateIntegrationRequest<I extends Integration> = Pick<AccountIntegration<I>, 'account' | 'name' | 'data' | 'configMode'>
 
-export interface CreateIntegrationResponse {
-  integration: AccountIntegration
+export interface CreateIntegrationResponse<I extends Integration> {
+  integration: AccountIntegration<I>
 }
 
-export interface DeleteIntegrationResponse {
-  integration: AccountIntegration
+export interface DeleteIntegrationResponse<I extends Integration> {
+  integration: AccountIntegration<I>
 }
 
-export interface GetIntegrationResponse {
-  integration: AccountIntegration
+export interface GetInstantIntegrationUsageParams {
+  integration?: string | string[]
+  account?: string
 }
 
-export interface GetIntegrationsParams {
+export interface GetInstantIntegrationUsageResponse {
+  [key: string]: IntegrationUsage
+}
+
+export type GetIntegrationUsageResponse = IntegrationUsage[]
+
+export interface GetIntegrationResponse<I extends Integration> {
+  integration: AccountIntegration<I>
+}
+
+export interface GetIntegrationsParams extends PaginationParams, PeriodParams {
   key?: string | string[]
   account?: string | string[]
   name?: string | string[]
@@ -114,49 +145,58 @@ export interface GetIntegrationsParams {
   active?: boolean
   suspended?: boolean
 
-  since?: number
-  until?: number
-
-  limit?: number
-  page?: number
-
   search?: string
-
-  sort?: string | string[]
 }
 
 export type UpdateIntegrationRequest = Pick<AccountIntegration, 'account' | 'name' | 'data' | 'configMode'>
 
-export interface UpdateIntegrationResponse {
-  integration: AccountIntegration
+export interface UpdateIntegrationResponse<I extends Integration = Integration> {
+  integration: AccountIntegration<I>
 }
 
+export type UsageDataRange = 'daily' | 'hourly'
+
 export async function checkIntegrationDnsRecords(host: string, token: string, key: string, cb?: RequestCallback): Promise<CheckIntegrationDnsRecordsResponse> {
-  const req = superagent.get(`${host}/integrations/${key}/dns`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/integration/${key}/dns`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function createIntegration(host: string, token: string, data: CreateIntegrationRequest, cb?: RequestCallback): Promise<CreateIntegrationResponse> {
+export async function createIntegration<I extends Integration = Integration>(host: string, token: string, data: CreateIntegrationRequest<I>, cb?: RequestCallback): Promise<CreateIntegrationResponse<I>> {
   const req = superagent.post(`${host}/integrations`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
 
-export async function deleteIntegration(host: string, token: string, key: string, cb?: RequestCallback): Promise<DeleteIntegrationResponse> {
-  const req = superagent.delete(`${host}/integrations/${key}`).set('Authorization', `Bearer ${token}`)
-  const res = await cb?.(req) || await req
-  return res.body
-}
-
-export async function getIntegration(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetIntegrationResponse> {
-  const req = superagent.get(`${host}/integrations/${key}`).set('Authorization', `Bearer ${token}`)
+export async function deleteIntegration<I extends Integration = Integration>(host: string, token: string, key: string, cb?: RequestCallback): Promise<DeleteIntegrationResponse<I>> {
+  const req = superagent.delete(`${host}/integration/${key}`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
 
 // eslint-disable-next-line max-len
-export async function getIntegrations(host: string, token: string, params?: GetIntegrationsParams, cb?: RequestCallback): Promise<SearchResponse<AccountIntegration>> {
+export async function getInstantIntegrationUsage(host: string, token: string, params?: GetInstantIntegrationUsageParams, cb?: RequestCallback): Promise<GetInstantIntegrationUsageResponse> {
+  const req = superagent.get(`${host}/integrations/usage/instant`).set('Authorization', `Bearer ${token}`)
+  params && req.query(params)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function getIntegration<I extends Integration = Integration>(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetIntegrationResponse<I>> {
+  const req = superagent.get(`${host}/integration/${key}`).set('Authorization', `Bearer ${token}`)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+// eslint-disable-next-line max-len
+export async function getIntegrationUsage(host: string, token: string, key: string, range: UsageDataRange, cb?: RequestCallback): Promise<GetIntegrationUsageResponse> {
+  const req = superagent.get(`${host}/integration/${key}/usage/${range}`).set('Authorization', `Bearer ${token}`)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+// eslint-disable-next-line max-len
+export async function getIntegrations<I extends Integration = Integration>(host: string, token: string, params?: GetIntegrationsParams, cb?: RequestCallback): Promise<SearchResponse<AccountIntegration<I>>> {
   const req = superagent.get(`${host}/integrations`).set('Authorization', `Bearer ${token}`)
   params && req.query(params)
   const res = await cb?.(req) || await req
@@ -164,8 +204,8 @@ export async function getIntegrations(host: string, token: string, params?: GetI
 }
 
 // eslint-disable-next-line max-len
-export async function updateIntegration(host: string, token: string, key: string, data: UpdateIntegrationRequest, cb?: RequestCallback): Promise<UpdateIntegrationResponse> {
-  const req = superagent.put(`${host}/integrations/${key}`).set('Authorization', `Bearer ${token}`).send(data)
+export async function updateIntegration<I extends Integration = Integration>(host: string, token: string, key: string, data: UpdateIntegrationRequest, cb?: RequestCallback): Promise<UpdateIntegrationResponse<I>> {
+  const req = superagent.put(`${host}/integration/${key}`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }

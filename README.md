@@ -2,11 +2,58 @@
 
 # account-utils
 
-Utility library for Account API
+Utility library for Account API.
+
+> :warning: This library is still in active development and testing, and `v0.*` releases may change in a backward-incompatible way.
 
 ## System Requirements
 
 - Node.js v20
+
+## Usage
+
+Install the package:
+
+```sh
+npm i @edge/account-utils
+```
+
+You can now use the functions and types exported to build your Account API integration. For example:
+
+```ts
+import * as utils from '@edge/account-utils'
+
+utils.err(utils.createServer('https://api.account.edge.network', 'my token', {
+  account: 'my account number',
+  region: 'my region ID',
+  settings: {
+    domain: 'my-domain-name.com',
+    os: {
+      id: 0
+    },
+    password: 'my password'
+  },
+  spec: {
+    bandwidth: 100, // Mbps
+    cpus: 2,
+    disk: 20480, // MiB
+    ram: 4096 // MiB
+  }
+}))
+  .then(res => {
+    console.log('OK', res)
+  })
+  .catch(err => {
+    console.error(err)
+    process.exit(1)
+  })
+```
+
+## Documentation
+
+Documentation is presently limited - see [edge/account-utils#3](https://github.com/edge/account-utils/issues/3)
+
+For now, you can read through scripts in [lib](./lib) for a complete overview of all package exports. You can also use your preferred autocomplete tool (such as Intellisense) to browse this package's code.
 
 ## Contributing
 

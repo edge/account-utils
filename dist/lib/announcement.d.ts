@@ -1,4 +1,4 @@
-import { Key, RequestCallback, SearchResponse } from '.';
+import { Key, PaginationParams, RequestCallback, SearchResponse } from '.';
 /** System-level announcement. */
 export interface Announcement extends Key {
     /** Content */
@@ -13,9 +13,7 @@ export interface Announcement extends Key {
 export interface GetAnnouncementResponse {
     announcement: Announcement;
 }
-export interface GetAnnouncementsParams {
-    limit?: number;
-    page?: number;
+export interface GetAnnouncementsParams extends Omit<PaginationParams, 'sort'> {
     unread?: boolean;
 }
 export interface MarkAnnouncementsRequest {

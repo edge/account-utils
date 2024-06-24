@@ -1,6 +1,6 @@
 {
   "name": "@edge/account-utils",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/lib/index.js",
   "scripts": {
@@ -28,6 +28,8 @@
   },
   "dependencies": {
     "@edge/cache-config": "^1.1.0",
+    "@edge/xe-utils": "^1.11.1",
+    "stripe": "^9.12.0",
     "superagent": "^9.0.2"
   }
 }
