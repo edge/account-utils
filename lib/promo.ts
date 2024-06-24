@@ -41,7 +41,7 @@ export interface PromoEntitlement extends Key, Timestamps {
   credit?: {
     remaining: number
   }
-  status: 'active' | 'consume' | 'expired' | 'partConsumed' | 'void'
+  status: 'active' | 'consumed' | 'expired' | 'partConsumed' | 'void'
 }
 
 export interface PromoSingleCodeConfig {
