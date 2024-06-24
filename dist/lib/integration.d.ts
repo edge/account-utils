@@ -97,12 +97,12 @@ export interface CheckIntegrationDnsRecordsResponse {
         recordExists?: string;
     }[];
 }
-export type CreateIntegrationRequest = Pick<AccountIntegration, 'account' | 'name' | 'data' | 'configMode'>;
-export interface CreateIntegrationResponse {
-    integration: AccountIntegration;
+export type CreateIntegrationRequest<I extends Integration> = Pick<AccountIntegration<I>, 'account' | 'name' | 'data' | 'configMode'>;
+export interface CreateIntegrationResponse<I extends Integration> {
+    integration: AccountIntegration<I>;
 }
-export interface DeleteIntegrationResponse {
-    integration: AccountIntegration;
+export interface DeleteIntegrationResponse<I extends Integration> {
+    integration: AccountIntegration<I>;
 }
 export interface GetInstantIntegrationUsageParams {
     integration?: string | string[];
@@ -112,8 +112,8 @@ export interface GetInstantIntegrationUsageResponse {
     [key: string]: IntegrationUsage;
 }
 export type GetIntegrationUsageResponse = IntegrationUsage[];
-export interface GetIntegrationResponse {
-    integration: AccountIntegration;
+export interface GetIntegrationResponse<I extends Integration> {
+    integration: AccountIntegration<I>;
 }
 export interface GetIntegrationsParams extends PaginationParams, PeriodParams {
     key?: string | string[];
@@ -126,15 +126,15 @@ export interface GetIntegrationsParams extends PaginationParams, PeriodParams {
     search?: string;
 }
 export type UpdateIntegrationRequest = Pick<AccountIntegration, 'account' | 'name' | 'data' | 'configMode'>;
-export interface UpdateIntegrationResponse {
-    integration: AccountIntegration;
+export interface UpdateIntegrationResponse<I extends Integration = Integration> {
+    integration: AccountIntegration<I>;
 }
 export type UsageDataRange = 'daily' | 'hourly';
 export declare function checkIntegrationDnsRecords(host: string, token: string, key: string, cb?: RequestCallback): Promise<CheckIntegrationDnsRecordsResponse>;
-export declare function createIntegration(host: string, token: string, data: CreateIntegrationRequest, cb?: RequestCallback): Promise<CreateIntegrationResponse>;
-export declare function deleteIntegration(host: string, token: string, key: string, cb?: RequestCallback): Promise<DeleteIntegrationResponse>;
+export declare function createIntegration<I extends Integration = Integration>(host: string, token: string, data: CreateIntegrationRequest<I>, cb?: RequestCallback): Promise<CreateIntegrationResponse<I>>;
+export declare function deleteIntegration<I extends Integration = Integration>(host: string, token: string, key: string, cb?: RequestCallback): Promise<DeleteIntegrationResponse<I>>;
 export declare function getInstantIntegrationUsage(host: string, token: string, params?: GetInstantIntegrationUsageParams, cb?: RequestCallback): Promise<GetInstantIntegrationUsageResponse>;
-export declare function getIntegration(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetIntegrationResponse>;
+export declare function getIntegration<I extends Integration = Integration>(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetIntegrationResponse<I>>;
 export declare function getIntegrationUsage(host: string, token: string, key: string, range: UsageDataRange, cb?: RequestCallback): Promise<GetIntegrationUsageResponse>;
-export declare function getIntegrations(host: string, token: string, params?: GetIntegrationsParams, cb?: RequestCallback): Promise<SearchResponse<AccountIntegration>>;
-export declare function updateIntegration(host: string, token: string, key: string, data: UpdateIntegrationRequest, cb?: RequestCallback): Promise<UpdateIntegrationResponse>;
+export declare function getIntegrations<I extends Integration = Integration>(host: string, token: string, params?: GetIntegrationsParams, cb?: RequestCallback): Promise<SearchResponse<AccountIntegration<I>>>;
+export declare function updateIntegration<I extends Integration = Integration>(host: string, token: string, key: string, data: UpdateIntegrationRequest, cb?: RequestCallback): Promise<UpdateIntegrationResponse<I>>;
