@@ -1,16 +1,16 @@
 {
   "name": "@edge/account-utils",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.1.1",
+  "description": "Utility library for Account API",
   "main": "dist/lib/index.js",
+  "author": "Edge Network <core@edge.network>",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "files": ["dist/**/*.ts", "dist/**/*.js"],
   "scripts": {
     "build": "tsc",
     "lint": "eslint --ext .ts src",
     "test": "mocha -r ts-node/register test/**/*.test.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@edge/eslint-config-typescript": "^0.1.5",
     "@edge/misc-utils": "^1.0.7",
