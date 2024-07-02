@@ -368,6 +368,9 @@ export function downloadInvoice(host: string, token: string, key: string, cb?: R
  * When a `filename` string is provided, this function attempts to download the PDF using a DOM workaround instead
  * of returning the PDF data blob to the caller.
  * This will only work correctly in a web browser.
+ *
+ * @note **This implementation is experimental and requires cross-browser testing.**
+ *       If you use this function, please provide feedback via https://github.com/edge/account-utils/issues
  */
 export function downloadInvoice(host: string, token: string, key: string, filename: string, cb?: RequestCallback): Promise<void>
 export async function downloadInvoice(host: string, token: string, key: string, filename?: string | RequestCallback, cb?: RequestCallback) {
