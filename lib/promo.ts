@@ -122,6 +122,8 @@ export async function redeemPromoCode(host: string, token: string, key: string |
   }
 
   // Standard form
+  cb = data as typeof cb
+  data = key
   const req = superagent.post(`${host}/promos/redeem`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
