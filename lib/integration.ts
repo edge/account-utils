@@ -129,6 +129,11 @@ export interface GetInstantIntegrationUsageResponse {
   [key: string]: IntegrationUsage
 }
 
+export interface GetIntegrationUsageParams {
+  range: UsageDataRange
+  count?: number
+}
+
 export type GetIntegrationUsageResponse = IntegrationUsage[]
 
 export interface GetIntegrationResponse<I extends Integration> {
@@ -189,8 +194,8 @@ export async function getIntegration<I extends Integration = Integration>(host: 
 }
 
 // eslint-disable-next-line max-len
-export async function getIntegrationUsage(host: string, token: string, key: string, range: UsageDataRange, cb?: RequestCallback): Promise<GetIntegrationUsageResponse> {
-  const req = superagent.get(`${host}/integration/${key}/usage/${range}`).set('Authorization', `Bearer ${token}`)
+export async function getIntegrationUsage(host: string, token: string, key: string, params: GetIntegrationUsageParams, cb?: RequestCallback): Promise<GetIntegrationUsageResponse> {
+  const req = superagent.get(`${host}/integration/${key}/usage`).set('Authorization', `Bearer ${token}`).query(params)
   const res = await cb?.(req) || await req
   return res.body
 }

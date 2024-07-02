@@ -1,7 +1,6 @@
 import { RequestCallback } from '.'
+import { UsageDataRange } from './integration'
 import superagent from 'superagent'
-
-export type CdnGraphRange = 'daily' | 'hourly'
 
 export interface DeleteCdnCacheRequest {
   path: string
@@ -9,6 +8,11 @@ export interface DeleteCdnCacheRequest {
 
 export interface DeleteCdnCacheResponse {
   message: string
+}
+
+export interface GetCdnGraphDataParams {
+  range: UsageDataRange
+  count?: number
 }
 
 export interface GetCdnGraphDataResponse {
@@ -33,8 +37,8 @@ export async function deleteCdnCache(host: string, token: string, key: string, d
   return res.body
 }
 
-export async function getCdnGraphData(host: string, token: string, key: string, range: CdnGraphRange, cb?: RequestCallback): Promise<GetCdnGraphDataResponse> {
-  const req = superagent.get(`${host}/integration/${key}/cdn/graph/${range}`).set('Authorization', `Bearer ${token}`)
+export async function getCdnGraphData(host: string, token: string, key: string, params: GetCdnGraphDataParams, cb?: RequestCallback): Promise<GetCdnGraphDataResponse> {
+  const req = superagent.get(`${host}/integration/${key}/cdn/graph`).set('Authorization', `Bearer ${token}`).query(params)
   const res = await cb?.(req) || await req
   return res.body
 }
