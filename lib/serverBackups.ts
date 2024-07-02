@@ -87,7 +87,7 @@ export async function getServerBackupsUsage(host: string, token: string, server:
 
 // eslint-disable-next-line max-len
 export async function getServerBackups(host: string, token: string, server: string, params?: GetServerBackupsParams, cb?: RequestCallback): Promise<SearchResponse<Backup>> {
-  const req = superagent.get(`${host}/servers/${server}/backups`).set('Authorization', `Bearer ${token}`)
+  const req = superagent.get(`${host}/server/${server}/backups`).set('Authorization', `Bearer ${token}`)
   params && req.query(params)
   const res = await cb?.(req) || await req
   return res.body
