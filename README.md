@@ -53,11 +53,11 @@ utils.err(utils.createServer('https://api.account.edge.network', 'my token', {
 
 Documentation is presently limited - see [edge/account-utils#3](https://github.com/edge/account-utils/issues/3)
 
-For now, you can read through scripts in [lib](./lib) for a complete overview of all package exports. You can also use your preferred autocomplete tool (such as Intellisense) to browse this package's code.
+For now, you can read through scripts in [lib](https://github.com/edge/account-utils/tree/master/lib) for a complete overview of all package exports. You can also use your preferred autocomplete tool (such as Intellisense) to browse this package's code.
 
 ## Contributing
 
-Interested in contributing to the project? Amazing! Before you do, please have a quick look at our [Contributor Guidelines](CONTRIBUTING.md) where we've got a few tips to help you get started.
+Interested in contributing to the project? Amazing! Before you do, please have a quick look at our [Contributor Guidelines](https://github.com/edge/account-utils/blob/master/CONTRIBUTING.md) where we've got a few tips to help you get started.
 
 ## License
 

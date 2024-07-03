@@ -1,3 +1,7 @@
+// Copyright (C) 2024 Edge Network Technologies Limited
+// Use of this source code is governed by a GNU GPL-style license
+// that can be found in the LICENSE.md file. All rights reserved.
+
 import { Config } from '@edge/cache-config'
 import superagent from 'superagent'
 import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.'

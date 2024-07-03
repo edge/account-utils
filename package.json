@@ -4,6 +4,11 @@
   "description": "Utility library for Account API",
   "main": "dist/lib/index.js",
   "author": "Edge Network <core@edge.network>",
+  "homepage": "https://github.com/edge/account-utils",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edge/account-utils.git"
+  },
   "license": "SEE LICENSE IN LICENSE.md",
   "files": ["dist/**/*.ts", "dist/**/*.js"],
   "scripts": {
