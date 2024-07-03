@@ -32,7 +32,7 @@ async function getServerBackupsUsage(host, token, server, cb) {
 exports.getServerBackupsUsage = getServerBackupsUsage;
 // eslint-disable-next-line max-len
 async function getServerBackups(host, token, server, params, cb) {
-    const req = superagent_1.default.get(`${host}/servers/${server}/backups`).set('Authorization', `Bearer ${token}`);
+    const req = superagent_1.default.get(`${host}/server/${server}/backups`).set('Authorization', `Bearer ${token}`);
     params && req.query(params);
     const res = await cb?.(req) || await req;
     return res.body;

@@ -38,8 +38,8 @@ async function getIntegration(host, token, key, cb) {
 }
 exports.getIntegration = getIntegration;
 // eslint-disable-next-line max-len
-async function getIntegrationUsage(host, token, key, range, cb) {
-    const req = superagent_1.default.get(`${host}/integration/${key}/usage/${range}`).set('Authorization', `Bearer ${token}`);
+async function getIntegrationUsage(host, token, key, params, cb) {
+    const req = superagent_1.default.get(`${host}/integration/${key}/usage`).set('Authorization', `Bearer ${token}`).query(params);
     const res = await cb?.(req) || await req;
     return res.body;
 }

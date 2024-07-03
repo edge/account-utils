@@ -111,6 +111,10 @@ export interface GetInstantIntegrationUsageParams {
 export interface GetInstantIntegrationUsageResponse {
     [key: string]: IntegrationUsage;
 }
+export interface GetIntegrationUsageParams {
+    range: UsageDataRange;
+    count?: number;
+}
 export type GetIntegrationUsageResponse = IntegrationUsage[];
 export interface GetIntegrationResponse<I extends Integration> {
     integration: AccountIntegration<I>;
@@ -135,6 +139,6 @@ export declare function createIntegration<I extends Integration = Integration>(h
 export declare function deleteIntegration<I extends Integration = Integration>(host: string, token: string, key: string, cb?: RequestCallback): Promise<DeleteIntegrationResponse<I>>;
 export declare function getInstantIntegrationUsage(host: string, token: string, params?: GetInstantIntegrationUsageParams, cb?: RequestCallback): Promise<GetInstantIntegrationUsageResponse>;
 export declare function getIntegration<I extends Integration = Integration>(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetIntegrationResponse<I>>;
-export declare function getIntegrationUsage(host: string, token: string, key: string, range: UsageDataRange, cb?: RequestCallback): Promise<GetIntegrationUsageResponse>;
+export declare function getIntegrationUsage(host: string, token: string, key: string, params: GetIntegrationUsageParams, cb?: RequestCallback): Promise<GetIntegrationUsageResponse>;
 export declare function getIntegrations<I extends Integration = Integration>(host: string, token: string, params?: GetIntegrationsParams, cb?: RequestCallback): Promise<SearchResponse<AccountIntegration<I>>>;
 export declare function updateIntegration<I extends Integration = Integration>(host: string, token: string, key: string, data: UpdateIntegrationRequest, cb?: RequestCallback): Promise<UpdateIntegrationResponse<I>>;

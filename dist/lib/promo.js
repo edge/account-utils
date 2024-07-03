@@ -36,6 +36,8 @@ async function redeemPromoCode(host, token, key, data, cb) {
         return res.body;
     }
     // Standard form
+    cb = data;
+    data = key;
     const req = superagent_1.default.post(`${host}/promos/redeem`).set('Authorization', `Bearer ${token}`).send(data);
     const res = await cb?.(req) || await req;
     return res.body;

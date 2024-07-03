@@ -28,7 +28,7 @@ async function getNotifications(host, token, params, cb) {
 exports.getNotifications = getNotifications;
 // eslint-disable-next-line max-len
 async function updateAllNotifications(host, token, data, cb) {
-    const req = superagent_1.default.put(`${host}/notifications`).set('Authorization', `Bearer ${token}`).send(data);
+    const req = superagent_1.default.put(`${host}/notifications/all`).set('Authorization', `Bearer ${token}`).send(data);
     const res = await cb?.(req) || await req;
     return res.body;
 }
