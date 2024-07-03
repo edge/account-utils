@@ -67,7 +67,7 @@ export async function getNotifications(host: string, token: string, params?: Get
 
 // eslint-disable-next-line max-len
 export async function updateAllNotifications(host: string, token: string, data: UpdateAllNotificationsRequest, cb?: RequestCallback): Promise<UpdateAllNotificationsResponse> {
-  const req = superagent.put(`${host}/notifications`).set('Authorization', `Bearer ${token}`).send(data)
+  const req = superagent.put(`${host}/notifications/all`).set('Authorization', `Bearer ${token}`).send(data)
   const res = await cb?.(req) || await req
   return res.body
 }
