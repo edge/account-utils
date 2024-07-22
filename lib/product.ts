@@ -6,18 +6,28 @@ import superagent from 'superagent'
 import { Key, PaginationParams, RequestCallback, SearchResponse, Timestamps } from '.'
 
 /** Generic price type. */
-export type Price = PriceFlatRate
+export type Price = PriceFixed | PriceFlatRate
+
+export interface PriceFixed {
+  type: 'fixed'
+  /** Cost (USD) */
+  cost: number
+  /** Indivisible flag */
+  indivisible: true
+}
 
 /**
  * Flat rate pricing definition.
  * A fixed USD `cost` is charged over a `costBasis` in hours.
  */
-export type PriceFlatRate = {
+export interface PriceFlatRate {
   type: 'flatRate'
   /** Cost (USD) */
   cost: number
   /** Cost basis (hours) */
   costBasis: number
+  /** Indivisible flag */
+  indivisible: false
 }
 
 /** Product */
