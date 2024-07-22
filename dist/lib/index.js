@@ -1,4 +1,7 @@
 "use strict";
+// Copyright (C) 2024 Edge Network Technologies Limited
+// Use of this source code is governed by a GNU GPL-style license
+// that can be found in the LICENSE.md file. All rights reserved.
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -16,6 +19,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./account"), exports);
 __exportStar(require("./announcement"), exports);
+__exportStar(require("./bareMetal"), exports);
 __exportStar(require("./billing"), exports);
 __exportStar(require("./cdn"), exports);
 __exportStar(require("./dns"), exports);

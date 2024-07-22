@@ -1,4 +1,7 @@
 "use strict";
+// Copyright (C) 2024 Edge Network Technologies Limited
+// Use of this source code is governed by a GNU GPL-style license
+// that can be found in the LICENSE.md file. All rights reserved.
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.err = exports.AccountError = void 0;
 /**

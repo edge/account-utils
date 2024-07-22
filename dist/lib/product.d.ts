@@ -1,19 +1,28 @@
 import { Key, PaginationParams, RequestCallback, SearchResponse, Timestamps } from '.';
 /** Generic price type. */
-export type Price = PriceFlatRate;
+export type Price = PriceFixed | PriceFlatRate;
+export interface PriceFixed {
+    type: 'fixed';
+    /** Cost (USD) */
+    cost: number;
+    /** Indivisible flag */
+    indivisible: true;
+}
 /**
  * Flat rate pricing definition.
  * A fixed USD `cost` is charged over a `costBasis` in hours.
  */
-export type PriceFlatRate = {
+export interface PriceFlatRate {
     type: 'flatRate';
     /** Cost (USD) */
     cost: number;
     /** Cost basis (hours) */
     costBasis: number;
-};
+    /** Indivisible flag */
+    indivisible: false;
+}
 /** Product */
-export interface Product<T extends Price = Price> {
+export interface Product<T extends Price = Price> extends Key, Timestamps {
     /** Name of product (for reference) */
     name: string;
     /** Summary (used in billing) */

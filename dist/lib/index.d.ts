@@ -1,5 +1,6 @@
 export * from './account';
 export * from './announcement';
+export * from './bareMetal';
 export * from './billing';
 export * from './cdn';
 export * from './dns';
