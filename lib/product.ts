@@ -31,7 +31,7 @@ export interface PriceFlatRate {
 }
 
 /** Product */
-export interface Product<T extends Price = Price> {
+export interface Product<T extends Price = Price> extends Key, Timestamps {
   /** Name of product (for reference) */
   name: string
   /** Summary (used in billing) */
