@@ -25,6 +25,8 @@ export interface PriceFlatRate {
 export interface Product<T extends Price = Price> extends Key, Timestamps {
     /** Name of product (for reference) */
     name: string;
+    /** Product group key */
+    group?: string | null;
     /** Summary (used in billing) */
     summary: string;
     /** Price for product subscription */
