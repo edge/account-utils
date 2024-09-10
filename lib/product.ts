@@ -3,7 +3,7 @@
 // that can be found in the LICENSE.md file. All rights reserved.
 
 import superagent from 'superagent'
-import { Key, PaginationParams, RequestCallback, SearchResponse, Timestamps } from '.'
+import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.'
 
 /** Generic price type. */
 export type Price = PriceFixed | PriceFlatRate
@@ -60,7 +60,17 @@ export interface GetProductResponse {
   product: Product
 }
 
-export interface GetProductSubscriptionsRequest extends Omit<PaginationParams, 'sort'> {}
+export interface GetProductsParams extends PaginationParams, PeriodParams {
+  key?: string | string[]
+  name?: string | string[]
+  group?: string | string[]
+  active?: boolean
+  internal?: boolean
+
+  search?: string
+}
+
+export interface GetProductSubscriptionsParams extends Omit<PaginationParams, 'sort'> {}
 
 export interface SubscribeToProductResponse {
   subscription: ProductSubscription
@@ -72,16 +82,22 @@ export interface UnsubscribeFromProductResponse {
   message: string
 }
 
-/** @todo require token */
-export async function getProduct(host: string, token: string | undefined, key: string, cb?: RequestCallback): Promise<GetProductResponse> {
+export async function getProduct(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetProductResponse> {
   const req = superagent.get(`${host}/product/${key}`)
   token && req.set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
 
+export async function getProducts(host: string, token: string, params?: GetProductsParams, cb?: RequestCallback): Promise<SearchResponse<Product>> {
+  const req = superagent.get(`${host}/products`).set('Authorization', `Bearer ${token}`)
+  params && req.query(params)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
 // eslint-disable-next-line max-len
-export async function getProductSubscriptions(host: string, token: string, params?: GetProductSubscriptionsRequest, cb?: RequestCallback): Promise<SearchResponse<ProductSubscription>> {
+export async function getProductSubscriptions(host: string, token: string, params?: GetProductSubscriptionsParams, cb?: RequestCallback): Promise<SearchResponse<ProductSubscription>> {
   const req = superagent.get(`${host}/products/subscriptions`).set('Authorization', `Bearer ${token}`)
   params && req.query(params)
   const res = await cb?.(req) || await req
