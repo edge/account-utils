@@ -1,4 +1,4 @@
-import { Key, PaginationParams, RequestCallback, SearchResponse, Timestamps } from '.';
+import { Key, PaginationParams, PeriodParams, RequestCallback, SearchResponse, Timestamps } from '.';
 /** Generic price type. */
 export type Price = PriceFixed | PriceFlatRate;
 export interface PriceFixed {
@@ -48,7 +48,15 @@ export interface ProductSubscription extends Key, Timestamps {
 export interface GetProductResponse {
     product: Product;
 }
-export interface GetProductSubscriptionsRequest extends Omit<PaginationParams, 'sort'> {
+export interface GetProductsParams extends PaginationParams, PeriodParams {
+    key?: string | string[];
+    name?: string | string[];
+    group?: string | string[];
+    active?: boolean;
+    internal?: boolean;
+    search?: string;
+}
+export interface GetProductSubscriptionsParams extends Omit<PaginationParams, 'sort'> {
 }
 export interface SubscribeToProductResponse {
     subscription: ProductSubscription;
@@ -58,8 +66,8 @@ export interface UnsubscribeFromProductResponse {
     subscription: ProductSubscription;
     message: string;
 }
-/** @todo require token */
-export declare function getProduct(host: string, token: string | undefined, key: string, cb?: RequestCallback): Promise<GetProductResponse>;
-export declare function getProductSubscriptions(host: string, token: string, params?: GetProductSubscriptionsRequest, cb?: RequestCallback): Promise<SearchResponse<ProductSubscription>>;
+export declare function getProduct(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetProductResponse>;
+export declare function getProducts(host: string, token: string, params?: GetProductsParams, cb?: RequestCallback): Promise<SearchResponse<Product>>;
+export declare function getProductSubscriptions(host: string, token: string, params?: GetProductSubscriptionsParams, cb?: RequestCallback): Promise<SearchResponse<ProductSubscription>>;
 export declare function subscribeToProduct(host: string, token: string, key: string, cb?: RequestCallback): Promise<SubscribeToProductResponse>;
 export declare function unsubscribeFromProduct(host: string, token: string, key: string, cb?: RequestCallback): Promise<UnsubscribeFromProductResponse>;
