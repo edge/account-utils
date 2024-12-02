@@ -424,7 +424,6 @@ export declare function createStripeSetupIntent(host: string, token: string, dat
 export declare function deletePaymentMethod(host: string, token: string, key: string, cb?: RequestCallback): Promise<DeletePaymentMethodResponse>;
 /**
  * Download an invoice PDF.
- * In this form, the PDF data blob will be returned to the caller.
  */
 export declare function downloadInvoice(host: string, token: string, key: string, cb?: RequestCallback): Promise<Blob>;
 /**
