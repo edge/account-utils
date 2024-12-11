@@ -19,6 +19,7 @@ export * from './service';
 export * from './session';
 export * from './storage';
 export * from './task';
+export * from './vpn';
 import type { SuperAgentRequest } from 'superagent';
 export interface Key {
     _key: string;
