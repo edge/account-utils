@@ -93,6 +93,11 @@ export interface GetDnsZonesParams extends PaginationParams, PeriodParams {
   search?: string
 }
 
+export interface RequestDnsZoneScanResponse {
+  zone: DnsZone
+  message: string
+}
+
 export interface UpdateDnsZoneRecordRequest extends Pick<DnsRecord, 'account' | 'name' | 'ttl' | 'type' | 'value'> {}
 
 export interface UpdateDnsZoneRecordResponse {
@@ -149,6 +154,12 @@ export async function getDnsZoneRecords(host: string, token: string, zone: strin
 export async function getDnsZones(host: string, token: string, params?: GetDnsZonesParams, cb?: RequestCallback): Promise<SearchResponse<DnsZone>> {
   const req = superagent.get(`${host}/dns`).set('Authorization', `Bearer ${token}`)
   params && req.query(params)
+  const res = await cb?.(req) || await req
+  return res.body
+}
+
+export async function requestDnsZoneScan(host: string, token: string, zone: string, cb?: RequestCallback): Promise<RequestDnsZoneScanResponse> {
+  const req = superagent.post(`${host}/dns/${zone}/scan`).set('Authorization', `Bearer ${token}`)
   const res = await cb?.(req) || await req
   return res.body
 }
