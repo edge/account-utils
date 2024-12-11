@@ -6,7 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateDnsZoneRecord = exports.getDnsZones = exports.getDnsZoneRecords = exports.getDnsZoneRecord = exports.getDnsZone = exports.deleteDnsZoneRecord = exports.deleteDnsZone = exports.createDnsZoneRecord = exports.createDnsZone = void 0;
+exports.updateDnsZoneRecord = exports.requestDnsZoneScan = exports.getDnsZones = exports.getDnsZoneRecords = exports.getDnsZoneRecord = exports.getDnsZone = exports.deleteDnsZoneRecord = exports.deleteDnsZone = exports.createDnsZoneRecord = exports.createDnsZone = void 0;
 const superagent_1 = __importDefault(require("superagent"));
 async function createDnsZone(host, token, data, cb) {
     const req = superagent_1.default.post(`${host}/dns`).set('Authorization', `Bearer ${token}`).send(data);
@@ -60,6 +60,12 @@ async function getDnsZones(host, token, params, cb) {
     return res.body;
 }
 exports.getDnsZones = getDnsZones;
+async function requestDnsZoneScan(host, token, zone, cb) {
+    const req = superagent_1.default.post(`${host}/dns/${zone}/scan`).set('Authorization', `Bearer ${token}`);
+    const res = await cb?.(req) || await req;
+    return res.body;
+}
+exports.requestDnsZoneScan = requestDnsZoneScan;
 // eslint-disable-next-line max-len
 async function updateDnsZoneRecord(host, token, zone, key, data, cb) {
     const req = superagent_1.default.put(`${host}/dns/${zone}/record/${key}`).set('Authorization', `Bearer ${token}`).send(data);

@@ -19,9 +19,11 @@ export interface DnsZone extends Key, Timestamps {
     /** Account key */
     account: string;
     /** Nameserver status */
-    ns?: {
+    ns: {
         /** Confirmed flag; indicates whether NS records for the zone point correctly to Edge DNS */
         confirmed: boolean;
+        /** Confirm requested flag;  */
+        confirmRequested: boolean;
         /** Last check timestamp */
         lastChecked: number;
     };
@@ -75,6 +77,10 @@ export interface GetDnsZonesParams extends PaginationParams, PeriodParams {
     ns?: boolean;
     search?: string;
 }
+export interface RequestDnsZoneScanResponse {
+    zone: DnsZone;
+    message: string;
+}
 export interface UpdateDnsZoneRecordRequest extends Pick<DnsRecord, 'account' | 'name' | 'ttl' | 'type' | 'value'> {
 }
 export interface UpdateDnsZoneRecordResponse {
@@ -90,4 +96,5 @@ export declare function getDnsZone(host: string, token: string, zone: string, cb
 export declare function getDnsZoneRecord(host: string, token: string, zone: string, key: string, cb?: RequestCallback): Promise<GetDnsZoneRecordResponse>;
 export declare function getDnsZoneRecords(host: string, token: string, zone: string, params?: GetDnsZoneRecordsParams, cb?: RequestCallback): Promise<SearchResponse<DnsRecord>>;
 export declare function getDnsZones(host: string, token: string, params?: GetDnsZonesParams, cb?: RequestCallback): Promise<SearchResponse<DnsZone>>;
+export declare function requestDnsZoneScan(host: string, token: string, zone: string, cb?: RequestCallback): Promise<RequestDnsZoneScanResponse>;
 export declare function updateDnsZoneRecord(host: string, token: string, zone: string, key: string, data: UpdateDnsZoneRecordRequest, cb?: RequestCallback): Promise<UpdateDnsZoneRecordResponse>;
