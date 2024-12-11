@@ -26,9 +26,11 @@ export interface DnsZone extends Key, Timestamps {
   /** Account key */
   account: string
   /** Nameserver status */
-  ns?: {
+  ns: {
     /** Confirmed flag; indicates whether NS records for the zone point correctly to Edge DNS */
     confirmed: boolean
+    /** Confirm requested flag;  */
+    confirmRequested: boolean
     /** Last check timestamp */
     lastChecked: number
   }
