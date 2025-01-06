@@ -18,6 +18,11 @@ export interface Server extends Key, Timestamps {
   host: number
   /** VM Disk ID */
   disk: number
+  /**
+   * Controller (entity ID).
+   * Normally empty, but if this is set, some special behaviours may apply to this server.
+   */
+  controller?: string
   /** Settings */
   settings: {
     /** Name */
