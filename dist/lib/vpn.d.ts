@@ -71,6 +71,7 @@ export interface EmailVpnCertificateResponse {
 }
 export interface GetVpnResponse {
     vpn: Vpn;
+    server: server.Server;
 }
 export interface GetVpnUserResponse {
     vpnUser: VpnUser;
@@ -85,6 +86,10 @@ export interface GetVpnsParams extends PeriodParams, PaginationParams {
     name?: string | string[];
     multiuser?: boolean;
     search?: string;
+}
+export interface GetVpnsResult {
+    vpn: Vpn;
+    server: server.Server;
 }
 export interface GetVpnUsersParams extends PeriodParams, PaginationParams {
     vpn?: string | string[];
@@ -116,7 +121,7 @@ export declare function deleteVpn(host: string, token: string, key: string, cb?:
 export declare function deleteVpnUser(host: string, token: string, key: string, userKey: string, cb?: RequestCallback): Promise<DeleteVpnUserResponse>;
 export declare function emailVpnCertificate(host: string, token: string, key: string, userKey: string, cb?: RequestCallback): Promise<EmailVpnCertificateResponse>;
 export declare function getVpn(host: string, token: string, key: string, cb?: RequestCallback): Promise<GetVpnResponse>;
-export declare function getVpns(host: string, token: string, params?: GetVpnsParams, cb?: RequestCallback): Promise<SearchResponse<Vpn>>;
+export declare function getVpns(host: string, token: string, params?: GetVpnsParams, cb?: RequestCallback): Promise<SearchResponse<GetVpnsResult>>;
 /**
  * Download a VPN certificate (OpenVPN).
  */
