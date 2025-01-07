@@ -87,6 +87,7 @@ export interface EmailVpnCertificateResponse {
 
 export interface GetVpnResponse {
   vpn: Vpn
+  server: server.Server
 }
 
 export interface GetVpnUserResponse {
@@ -105,6 +106,11 @@ export interface GetVpnsParams extends PeriodParams, PaginationParams {
   multiuser?: boolean
 
   search?: string
+}
+
+export interface GetVpnsResult {
+  vpn: Vpn
+  server: server.Server
 }
 
 export interface GetVpnUsersParams extends PeriodParams, PaginationParams {
@@ -176,7 +182,7 @@ export async function getVpn(host: string, token: string, key: string, cb?: Requ
   return res.body
 }
 
-export async function getVpns(host: string, token: string, params?: GetVpnsParams, cb?: RequestCallback): Promise<SearchResponse<Vpn>> {
+export async function getVpns(host: string, token: string, params?: GetVpnsParams, cb?: RequestCallback): Promise<SearchResponse<GetVpnsResult>> {
   const req = superagent.get(`${host}/vpns`).set('Authorization', `Bearer ${token}`)
   params && req.query(params)
   const res = await cb?.(req) || await req
