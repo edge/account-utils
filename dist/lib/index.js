@@ -38,3 +38,4 @@ __exportStar(require("./service"), exports);
 __exportStar(require("./session"), exports);
 __exportStar(require("./storage"), exports);
 __exportStar(require("./task"), exports);
+__exportStar(require("./vpn"), exports);

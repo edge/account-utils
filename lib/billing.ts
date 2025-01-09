@@ -360,7 +360,6 @@ export async function deletePaymentMethod(host: string, token: string, key: stri
 
 /**
  * Download an invoice PDF.
- * In this form, the PDF data blob will be returned to the caller.
  */
 export function downloadInvoice(host: string, token: string, key: string, cb?: RequestCallback): Promise<Blob>
 /**
@@ -374,23 +373,28 @@ export function downloadInvoice(host: string, token: string, key: string, cb?: R
  */
 export function downloadInvoice(host: string, token: string, key: string, filename: string, cb?: RequestCallback): Promise<void>
 export async function downloadInvoice(host: string, token: string, key: string, filename?: string | RequestCallback, cb?: RequestCallback) {
-  // Resolve optional arguments
+  // Resolve overload arguments
+  let _filename
+  let _cb
   if (typeof filename === 'function') {
-    cb = filename
-    filename = undefined
+    _cb = filename
+  }
+  else if (typeof filename === 'string') {
+    _filename = filename
+    _cb = cb
   }
 
   const req = superagent.get(`${host}/billing/invoice/${key}/download`)
     .responseType('blob')
     .set('Authorization', `Bearer ${token}`)
 
-  const res = await cb?.(req) || await req
+  const res = await _cb?.(req) || await req
 
-  if (filename) {
+  if (_filename) {
     const el = document.createElement('a')
     const url = window.URL.createObjectURL(res.body)
     el.href = url
-    el.download = filename
+    el.download = _filename
     el.click()
     window.URL.revokeObjectURL(url)
   }

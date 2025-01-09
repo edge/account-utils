@@ -38,20 +38,25 @@ async function deletePaymentMethod(host, token, key, cb) {
 }
 exports.deletePaymentMethod = deletePaymentMethod;
 async function downloadInvoice(host, token, key, filename, cb) {
-    // Resolve optional arguments
+    // Resolve overload arguments
+    let _filename;
+    let _cb;
     if (typeof filename === 'function') {
-        cb = filename;
-        filename = undefined;
+        _cb = filename;
+    }
+    else if (typeof filename === 'string') {
+        _filename = filename;
+        _cb = cb;
     }
     const req = superagent_1.default.get(`${host}/billing/invoice/${key}/download`)
         .responseType('blob')
         .set('Authorization', `Bearer ${token}`);
-    const res = await cb?.(req) || await req;
-    if (filename) {
+    const res = await _cb?.(req) || await req;
+    if (_filename) {
         const el = document.createElement('a');
         const url = window.URL.createObjectURL(res.body);
         el.href = url;
-        el.download = filename;
+        el.download = _filename;
         el.click();
         window.URL.revokeObjectURL(url);
     }
